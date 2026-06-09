@@ -1,2 +1,148 @@
-# hotsite-heventos-headless
-Hotsite de eventos desenvolvido com Next.js utilizando arquitetura Headless, focado em alta performance, SEO e escalabilidade. O projeto consome dados de uma API/CMS para exibir informações como eventos, programação, palestrantes, inscrições e conteúdos dinâmicos.
+# Hotsite de Eventos — Headless
+
+Hotsite de eventos desenvolvido com **Next.js 15** (App Router) e **WordPress Headless**, consumindo dados via **GraphQL** e **Faust.js**.
+
+## Stack
+
+- **Frontend:** Next.js 15, TypeScript, Tailwind CSS 4
+- **CMS:** WordPress + WPGraphQL + FaustWP
+- **Integração:** Faust.js, Apollo Client, `@faustwp/blocks`
+- **Infra:** Docker (multi-stage), GitHub Actions (CI/CD)
+
+## Estrutura do projeto
+
+```
+app/              # Rotas App Router, API, sitemap, robots
+components/       # Componentes reutilizáveis (layout, Gutenberg, busca)
+layouts/          # Layouts globais
+lib/              # Utilitários (env, GraphQL, SEO, Faust)
+services/         # Camada de serviços (conteúdo, menus, settings)
+graphql/          # Queries e fragments GraphQL
+hooks/            # Hooks React (busca, etc.)
+types/            # Tipos TypeScript
+styles/           # Estilos Gutenberg e WordPress
+wp-blocks/        # Mapeamento de blocos Gutenberg
+public/           # Assets estáticos
+```
+
+## Pré-requisitos no WordPress
+
+Instale e ative os plugins:
+
+1. [WPGraphQL](https://www.wpgraphql.com/)
+2. [FaustWP](https://faustjs.org/)
+3. [WPGraphQL Content Blocks](https://github.com/wpengine/wp-graphql-content-blocks) (blocos Gutenberg)
+4. [Yoast SEO](https://yoast.com/) + WPGraphQL Yoast SEO (opcional, para SEO)
+5. Custom Post Type **Evento** (`evento`) — via CPT UI, ACF ou código
+
+### Menus
+
+Registre as localizações de menu no WordPress:
+
+- `PRIMARY` — menu principal
+- `FOOTER` — menu do rodapé
+
+### FaustWP
+
+Em **Configurações → Faust**, defina:
+
+- **Front-end site URL:** URL do Next.js (ex: `http://localhost:3000`)
+- Copie a **Secret Key** para `FAUST_SECRET_KEY`
+
+## Configuração local
+
+```bash
+cp .env.example .env.local
+```
+
+Edite `.env.local`:
+
+```env
+NEXT_PUBLIC_WORDPRESS_URL=http://localhost:8080
+NEXT_PUBLIC_GRAPHQL_ENDPOINT=http://localhost:8080/graphql
+NEXT_PUBLIC_SITE_URL=http://localhost:3000
+FAUST_SECRET_KEY=sua-chave-secreta
+NODE_ENV=development
+```
+
+```bash
+npm install --legacy-peer-deps
+npm run generate   # Gera possibleTypes.json (requer WPGraphQL com introspection)
+npm run dev
+```
+
+Acesse [http://localhost:3000](http://localhost:3000).
+
+## Compatibilidade Gutenberg
+
+O frontend reproduz estilos do editor via:
+
+- CSS nativo do WordPress (`block-library`, `global-styles`)
+- Componentes `@faustwp/blocks` (blocos core)
+- `renderedHtml` como fallback para fidelidade total
+- Classes e variáveis CSS do Gutenberg (`is-layout-constrained`, etc.)
+
+Alterações de cor, tipografia, espaçamento, bordas e gradientes feitas no editor são refletidas automaticamente no frontend.
+
+## Scripts
+
+| Comando | Descrição |
+|---------|-----------|
+| `npm run dev` | Desenvolvimento (Faust CLI) |
+| `npm run build` | Build de produção |
+| `npm run start` | Servidor de produção |
+| `npm run lint` | ESLint |
+| `npm run typecheck` | Verificação TypeScript |
+| `npm run generate` | Gera `possibleTypes.json` via introspection |
+
+## Docker
+
+```bash
+docker build \
+  --build-arg NEXT_PUBLIC_WORDPRESS_URL=https://seu-wp.com \
+  --build-arg NEXT_PUBLIC_GRAPHQL_ENDPOINT=https://seu-wp.com/graphql \
+  --build-arg NEXT_PUBLIC_SITE_URL=https://seu-site.com \
+  --build-arg FAUST_SECRET_KEY=sua-chave \
+  -t hotsite-heventos .
+
+docker run -p 3000:3000 hotsite-heventos
+```
+
+## GitHub Actions
+
+O workflow `.github/workflows/deploy.yml` executa:
+
+1. Checkout
+2. Instalação de dependências
+3. Lint e typecheck
+4. Build
+5. Build e push da imagem Docker (GHCR)
+6. Deploy via SSH (configurável)
+
+### Secrets necessários
+
+| Secret | Descrição |
+|--------|-----------|
+| `NEXT_PUBLIC_WORDPRESS_URL` | URL do WordPress |
+| `NEXT_PUBLIC_GRAPHQL_ENDPOINT` | Endpoint GraphQL |
+| `NEXT_PUBLIC_SITE_URL` | URL pública do frontend |
+| `FAUST_SECRET_KEY` | Chave do FaustWP |
+| `SSH_HOST` | Host do servidor |
+| `SSH_USER` | Usuário SSH |
+| `SSH_PRIVATE_KEY` | Chave privada SSH |
+| `SSH_PORT` | Porta SSH (opcional) |
+
+## Funcionalidades preparadas
+
+- Menus, páginas, posts e CPTs dinâmicos
+- Taxonomias via `nodeByUri`
+- SEO, Open Graph e metadata dinâmica
+- Sitemap e robots.txt
+- Busca (`/busca`)
+- Paginação (queries com cursor)
+- ISR com `revalidate: 60`
+- Preview via Faust API (`/api/faust`)
+
+## Licença
+
+MIT

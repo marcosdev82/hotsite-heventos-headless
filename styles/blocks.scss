@@ -1,0 +1,10 @@
+.entry-content {
+  max-width: var(--wp--style--global--content-size, 65rem);
+  margin-inline: auto;
+}
+
+.wp-block-post-content {
+  > * + * {
+    margin-block-start: var(--wp--style--block-gap, 1.5rem);
+  }
+}

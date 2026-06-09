@@ -1,0 +1,12 @@
+:root {
+  --wp--style--block-gap: 1.5rem;
+}
+
+body {
+  font-family: var(
+    --wp--preset--font-family--system-font,
+    system-ui,
+    -apple-system,
+    sans-serif
+  );
+}
