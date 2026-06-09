@@ -91,7 +91,6 @@ jobs:
             NEXT_PUBLIC_WORDPRESS_URL=${{ secrets.NEXT_PUBLIC_WORDPRESS_URL }}
             NEXT_PUBLIC_GRAPHQL_ENDPOINT=${{ secrets.NEXT_PUBLIC_GRAPHQL_ENDPOINT }}
             NEXT_PUBLIC_SITE_URL=${{ secrets.NEXT_PUBLIC_SITE_URL }}
-            FAUST_SECRET_KEY=${{ secrets.FAUST_SECRET_KEY }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 

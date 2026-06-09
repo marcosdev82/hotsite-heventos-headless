@@ -102,7 +102,6 @@ docker build \
   --build-arg NEXT_PUBLIC_WORDPRESS_URL=https://seu-wp.com \
   --build-arg NEXT_PUBLIC_GRAPHQL_ENDPOINT=https://seu-wp.com/graphql \
   --build-arg NEXT_PUBLIC_SITE_URL=https://seu-site.com \
-  --build-arg FAUST_SECRET_KEY=sua-chave \
   -t hotsite-heventos .
 
 docker run -p 3000:3000 hotsite-heventos
