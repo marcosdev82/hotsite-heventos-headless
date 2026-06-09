@@ -19,7 +19,6 @@ jobs:
   build-and-test:
     name: Build & Test
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -51,20 +50,29 @@ jobs:
     name: Docker Build
     runs-on: ubuntu-latest
     needs: build-and-test
-    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
-
+    if: always()
     permissions:
       contents: read
       packages: write
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Decide if docker push should run
+        id: gate
+        run: |
+          if [[ "${{ github.event_name }}" == "push" && ( "${{ github.ref }}" == "refs/heads/main" || "${{ github.ref }}" == "refs/heads/master" ) ]]; then
+            echo "run_push=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "run_push=false" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Set up Docker Buildx
+        if: steps.gate.outputs.run_push == 'true'
         uses: docker/setup-buildx-action@v3
 
       - name: Log in to Container Registry
+        if: steps.gate.outputs.run_push == 'true'
         uses: docker/login-action@v3
         with:
           registry: ${{ env.REGISTRY }}
@@ -72,6 +80,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Extract metadata
+        if: steps.gate.outputs.run_push == 'true'
         id: meta
         uses: docker/metadata-action@v5
         with:
@@ -81,6 +90,7 @@ jobs:
             type=raw,value=latest
 
       - name: Build and push Docker image
+        if: steps.gate.outputs.run_push == 'true'
         uses: docker/build-push-action@v6
         with:
           context: .
@@ -94,18 +104,21 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
+      - name: Warn docker skipped by policy
+        if: steps.gate.outputs.run_push != 'true'
+        run: echo "::warning::Docker push executa apenas em push para main/master."
+
   deploy-strategy:
     name: Resolve Deploy Strategy
     runs-on: ubuntu-latest
     needs: docker
+    if: always()
     outputs:
       use_webhook: ${{ steps.strategy.outputs.use_webhook }}
       use_ssh: ${{ steps.strategy.outputs.use_ssh }}
       missing_ssh_fields: ${{ steps.strategy.outputs.missing_ssh_fields }}
       has_runtime_env: ${{ steps.strategy.outputs.has_runtime_env }}
       missing_runtime_env_fields: ${{ steps.strategy.outputs.missing_runtime_env_fields }}
-    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
-
     steps:
       - name: Decide deploy mode
         id: strategy
@@ -121,98 +134,55 @@ jobs:
         run: |
           missing_ssh_fields=""
           missing_runtime_env_fields=""
-
-          if [ -n "$DEPLOY_WEBHOOK_URL" ]; then
-            echo "use_webhook=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "use_webhook=false" >> "$GITHUB_OUTPUT"
-          fi
-
-          if [ -z "$SSH_HOST" ]; then
-            missing_ssh_fields="SSH_HOST"
-          fi
-
-          if [ -z "$SSH_USER" ]; then
-            if [ -n "$missing_ssh_fields" ]; then
-              missing_ssh_fields="$missing_ssh_fields,SSH_USER"
-            else
-              missing_ssh_fields="SSH_USER"
-            fi
-          fi
-
-          if [ -z "$SSH_PRIVATE_KEY" ]; then
-            if [ -n "$missing_ssh_fields" ]; then
-              missing_ssh_fields="$missing_ssh_fields,SSH_PRIVATE_KEY"
-            else
-              missing_ssh_fields="SSH_PRIVATE_KEY"
-            fi
-          fi
-
-          if [ -z "$missing_ssh_fields" ]; then
-            echo "use_ssh=true" >> "$GITHUB_OUTPUT"
-            echo "missing_ssh_fields=none" >> "$GITHUB_OUTPUT"
-          else
-            echo "use_ssh=false" >> "$GITHUB_OUTPUT"
-            echo "missing_ssh_fields=$missing_ssh_fields" >> "$GITHUB_OUTPUT"
-          fi
-
-          if [ -z "$NEXT_PUBLIC_WORDPRESS_URL" ]; then
-            missing_runtime_env_fields="NEXT_PUBLIC_WORDPRESS_URL"
-          fi
-
-          if [ -z "$NEXT_PUBLIC_GRAPHQL_ENDPOINT" ]; then
-            if [ -n "$missing_runtime_env_fields" ]; then
-              missing_runtime_env_fields="$missing_runtime_env_fields,NEXT_PUBLIC_GRAPHQL_ENDPOINT"
-            else
-              missing_runtime_env_fields="NEXT_PUBLIC_GRAPHQL_ENDPOINT"
-            fi
-          fi
-
-          if [ -z "$NEXT_PUBLIC_SITE_URL" ]; then
-            if [ -n "$missing_runtime_env_fields" ]; then
-              missing_runtime_env_fields="$missing_runtime_env_fields,NEXT_PUBLIC_SITE_URL"
-            else
-              missing_runtime_env_fields="NEXT_PUBLIC_SITE_URL"
-            fi
-          fi
-
-          if [ -z "$FAUST_SECRET_KEY" ]; then
-            if [ -n "$missing_runtime_env_fields" ]; then
-              missing_runtime_env_fields="$missing_runtime_env_fields,FAUST_SECRET_KEY"
-            else
-              missing_runtime_env_fields="FAUST_SECRET_KEY"
-            fi
-          fi
-
-          if [ -z "$missing_runtime_env_fields" ]; then
-            echo "has_runtime_env=true" >> "$GITHUB_OUTPUT"
-            echo "missing_runtime_env_fields=none" >> "$GITHUB_OUTPUT"
-          else
-            echo "has_runtime_env=false" >> "$GITHUB_OUTPUT"
-            echo "missing_runtime_env_fields=$missing_runtime_env_fields" >> "$GITHUB_OUTPUT"
-          fi
+          if [ -n "$DEPLOY_WEBHOOK_URL" ]; then echo "use_webhook=true" >> "$GITHUB_OUTPUT"; else echo "use_webhook=false" >> "$GITHUB_OUTPUT"; fi
+          if [ -z "$SSH_HOST" ]; then missing_ssh_fields="SSH_HOST"; fi
+          if [ -z "$SSH_USER" ]; then missing_ssh_fields="${missing_ssh_fields:+$missing_ssh_fields,}SSH_USER"; fi
+          if [ -z "$SSH_PRIVATE_KEY" ]; then missing_ssh_fields="${missing_ssh_fields:+$missing_ssh_fields,}SSH_PRIVATE_KEY"; fi
+          if [ -z "$missing_ssh_fields" ]; then echo "use_ssh=true" >> "$GITHUB_OUTPUT"; echo "missing_ssh_fields=none" >> "$GITHUB_OUTPUT"; else echo "use_ssh=false" >> "$GITHUB_OUTPUT"; echo "missing_ssh_fields=$missing_ssh_fields" >> "$GITHUB_OUTPUT"; fi
+          if [ -z "$NEXT_PUBLIC_WORDPRESS_URL" ]; then missing_runtime_env_fields="NEXT_PUBLIC_WORDPRESS_URL"; fi
+          if [ -z "$NEXT_PUBLIC_GRAPHQL_ENDPOINT" ]; then missing_runtime_env_fields="${missing_runtime_env_fields:+$missing_runtime_env_fields,}NEXT_PUBLIC_GRAPHQL_ENDPOINT"; fi
+          if [ -z "$NEXT_PUBLIC_SITE_URL" ]; then missing_runtime_env_fields="${missing_runtime_env_fields:+$missing_runtime_env_fields,}NEXT_PUBLIC_SITE_URL"; fi
+          if [ -z "$FAUST_SECRET_KEY" ]; then missing_runtime_env_fields="${missing_runtime_env_fields:+$missing_runtime_env_fields,}FAUST_SECRET_KEY"; fi
+          if [ -z "$missing_runtime_env_fields" ]; then echo "has_runtime_env=true" >> "$GITHUB_OUTPUT"; echo "missing_runtime_env_fields=none" >> "$GITHUB_OUTPUT"; else echo "has_runtime_env=false" >> "$GITHUB_OUTPUT"; echo "missing_runtime_env_fields=$missing_runtime_env_fields" >> "$GITHUB_OUTPUT"; fi
 
   deploy-webhook:
     name: Deploy via Server Webhook
     runs-on: ubuntu-latest
     needs: deploy-strategy
-    if: needs.deploy-strategy.outputs.use_webhook == 'true'
-
+    if: always()
     steps:
-      - name: Trigger deployment webhook
+      - name: Execute or warn
         run: |
-          curl --fail --show-error --silent \
-            --request POST \
-            "${{ secrets.DEPLOY_WEBHOOK_URL || vars.DEPLOY_WEBHOOK_URL }}"
+          if [ "${{ needs.deploy-strategy.outputs.use_webhook }}" = "true" ]; then
+            curl --fail --show-error --silent --request POST "${{ secrets.DEPLOY_WEBHOOK_URL || vars.DEPLOY_WEBHOOK_URL }}"
+          else
+            echo "::warning::Webhook não configurado; job executado sem deploy."
+          fi
 
   deploy-ssh:
     name: Deploy to Server via SSH
     runs-on: ubuntu-latest
     needs: deploy-strategy
-    if: needs.deploy-strategy.outputs.use_webhook != 'true' && needs.deploy-strategy.outputs.use_ssh == 'true' && needs.deploy-strategy.outputs.has_runtime_env == 'true'
-
+    if: always()
     steps:
+      - name: Execute or warn
+        run: |
+          if [ "${{ needs.deploy-strategy.outputs.use_webhook }}" = "true" ]; then
+            echo "::notice::Webhook ativo; deploy SSH não necessário."
+            exit 0
+          fi
+          if [ "${{ needs.deploy-strategy.outputs.use_ssh }}" != "true" ]; then
+            echo "::warning::Config SSH incompleta; deploy SSH ignorado."
+            exit 0
+          fi
+          if [ "${{ needs.deploy-strategy.outputs.has_runtime_env }}" != "true" ]; then
+            echo "::warning::Faltam vars de runtime; deploy SSH ignorado."
+            exit 0
+          fi
+          echo "ok_to_deploy=true" >> $GITHUB_ENV
+
       - name: Deploy via SSH
+        if: env.ok_to_deploy == 'true'
         uses: appleboy/ssh-action@v1.2.0
         with:
           host: ${{ secrets.SSH_HOST || vars.SSH_HOST }}
@@ -240,28 +210,29 @@ jobs:
     name: Missing Runtime Env Configuration
     runs-on: ubuntu-latest
     needs: deploy-strategy
-    if: needs.deploy-strategy.outputs.use_webhook != 'true' && needs.deploy-strategy.outputs.use_ssh == 'true' && needs.deploy-strategy.outputs.has_runtime_env != 'true'
+    if: always()
     continue-on-error: true
-
     steps:
-      - name: Warn about missing runtime env vars
+      - name: Warn status
         run: |
-          echo "::warning::As variáveis de runtime para o container estão ausentes."
-          echo "::warning::Campos ausentes detectados: ${{ needs.deploy-strategy.outputs.missing_runtime_env_fields }}"
-          echo "::warning::Configure esses valores em Secrets ou Variables do repositório."
-          echo "Deploy ignorado até que as variáveis de ambiente sejam configuradas."
+          if [ "${{ needs.deploy-strategy.outputs.has_runtime_env }}" != "true" ]; then
+            echo "::warning::Campos ausentes: ${{ needs.deploy-strategy.outputs.missing_runtime_env_fields }}"
+          else
+            echo "::notice::Runtime env OK."
+          fi
 
   deploy-config-error:
     name: Missing Deploy Configuration
     runs-on: ubuntu-latest
     needs: deploy-strategy
-    if: needs.deploy-strategy.outputs.use_webhook != 'true' && needs.deploy-strategy.outputs.use_ssh != 'true'
+    if: always()
     continue-on-error: true
-
     steps:
-      - name: Warn about missing deploy configuration
+      - name: Warn status
         run: |
-          echo "::warning::Nenhuma estratégia de deploy configurada."
-          echo "::warning::Configure DEPLOY_WEBHOOK_URL (recomendado) ou SSH_HOST+SSH_USER (secret ou variable) e SSH_PRIVATE_KEY (secret)."
-          echo "::warning::Campos SSH ausentes detectados: ${{ needs.deploy-strategy.outputs.missing_ssh_fields }}"
-          echo "Deploy ignorado até que a configuração seja fornecida."
+          if [ "${{ needs.deploy-strategy.outputs.use_webhook }}" != "true" ] && [ "${{ needs.deploy-strategy.outputs.use_ssh }}" != "true" ]; then
+            echo "::warning::Nenhuma estratégia de deploy configurada."
+            echo "::warning::Campos SSH ausentes: ${{ needs.deploy-strategy.outputs.missing_ssh_fields }}"
+          else
+            echo "::notice::Deploy configurado."
+          fi
