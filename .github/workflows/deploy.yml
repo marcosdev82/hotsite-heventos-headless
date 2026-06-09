@@ -109,7 +109,7 @@ jobs:
       - name: Decide deploy mode
         id: strategy
         env:
-          DEPLOY_WEBHOOK_URL: ${{ secrets.DEPLOY_WEBHOOK_URL }}
+          DEPLOY_WEBHOOK_URL: ${{ secrets.DEPLOY_WEBHOOK_URL || vars.DEPLOY_WEBHOOK_URL }}
           SSH_HOST: ${{ secrets.SSH_HOST || vars.SSH_HOST }}
           SSH_USER: ${{ secrets.SSH_USER || vars.SSH_USER }}
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
@@ -161,7 +161,7 @@ jobs:
         run: |
           curl --fail --show-error --silent \
             --request POST \
-            "${{ secrets.DEPLOY_WEBHOOK_URL }}"
+            "${{ secrets.DEPLOY_WEBHOOK_URL || vars.DEPLOY_WEBHOOK_URL }}"
 
   deploy-ssh:
     name: Deploy to Server via SSH
