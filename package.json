@@ -1,0 +1,36 @@
+{
+  "name": "hotsite-heventos-headless",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "faust dev",
+    "build": "faust build --skip-health-checks",
+    "start": "faust start",
+    "lint": "eslint",
+    "generate": "faust generatePossibleTypes",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@apollo/client": "^3.14.1",
+    "@faustwp/blocks": "^6.1.8",
+    "@faustwp/cli": "^3.3.4",
+    "@faustwp/core": "^3.4.1",
+    "@wordpress/style-engine": "^2.21.0",
+    "graphql": "^16.12.0",
+    "next": "^15.5.12",
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
+    "sass": "^1.94.0"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3.3.5",
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "^15.5.12",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
+}
