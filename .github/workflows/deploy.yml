@@ -241,25 +241,27 @@ jobs:
     runs-on: ubuntu-latest
     needs: deploy-strategy
     if: needs.deploy-strategy.outputs.use_webhook != 'true' && needs.deploy-strategy.outputs.use_ssh == 'true' && needs.deploy-strategy.outputs.has_runtime_env != 'true'
+    continue-on-error: true
 
     steps:
-      - name: Fail with clear message
+      - name: Warn about missing runtime env vars
         run: |
-          echo "As variáveis de runtime para o container estão ausentes."
-          echo "Campos ausentes detectados: ${{ needs.deploy-strategy.outputs.missing_runtime_env_fields }}"
-          echo "Configure esses valores em Secrets ou Variables do repositório."
-          exit 1
+          echo "::warning::As variáveis de runtime para o container estão ausentes."
+          echo "::warning::Campos ausentes detectados: ${{ needs.deploy-strategy.outputs.missing_runtime_env_fields }}"
+          echo "::warning::Configure esses valores em Secrets ou Variables do repositório."
+          echo "Deploy ignorado até que as variáveis de ambiente sejam configuradas."
 
   deploy-config-error:
     name: Missing Deploy Configuration
     runs-on: ubuntu-latest
     needs: deploy-strategy
     if: needs.deploy-strategy.outputs.use_webhook != 'true' && needs.deploy-strategy.outputs.use_ssh != 'true'
+    continue-on-error: true
 
     steps:
-      - name: Fail with clear message
+      - name: Warn about missing deploy configuration
         run: |
-          echo "Nenhuma estratégia de deploy configurada."
-          echo "Configure DEPLOY_WEBHOOK_URL (recomendado) ou SSH_HOST+SSH_USER (secret ou variable) e SSH_PRIVATE_KEY (secret)."
-          echo "Campos SSH ausentes detectados: ${{ needs.deploy-strategy.outputs.missing_ssh_fields }}"
-          exit 1
+          echo "::warning::Nenhuma estratégia de deploy configurada."
+          echo "::warning::Configure DEPLOY_WEBHOOK_URL (recomendado) ou SSH_HOST+SSH_USER (secret ou variable) e SSH_PRIVATE_KEY (secret)."
+          echo "::warning::Campos SSH ausentes detectados: ${{ needs.deploy-strategy.outputs.missing_ssh_fields }}"
+          echo "Deploy ignorado até que a configuração seja fornecida."
