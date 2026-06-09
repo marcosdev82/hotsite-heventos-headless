@@ -117,7 +117,7 @@ O workflow `.github/workflows/deploy.yml` executa:
 3. Lint e typecheck
 4. Build
 5. Build e push da imagem Docker (GHCR)
-6. Deploy via SSH (configurável)
+6. Deploy via webhook de implantação (quando configurado) ou via SSH
 
 ### Secrets necessários
 
@@ -127,10 +127,16 @@ O workflow `.github/workflows/deploy.yml` executa:
 | `NEXT_PUBLIC_GRAPHQL_ENDPOINT` | Endpoint GraphQL |
 | `NEXT_PUBLIC_SITE_URL` | URL pública do frontend |
 | `FAUST_SECRET_KEY` | Chave do FaustWP |
+| `DEPLOY_WEBHOOK_URL` | URL de gatilho de implantação do servidor (opcional, recomendado quando usa painel como Easypanel) |
 | `SSH_HOST` | Host do servidor |
 | `SSH_USER` | Usuário SSH |
 | `SSH_PRIVATE_KEY` | Chave privada SSH |
 | `SSH_PORT` | Porta SSH (opcional) |
+
+Observações:
+
+- Se `DEPLOY_WEBHOOK_URL` estiver configurado, o workflow dispara o deploy via webhook após o push da imagem Docker.
+- Se `DEPLOY_WEBHOOK_URL` não estiver configurado, o workflow faz deploy via SSH executando `docker pull` e `docker run` no servidor.
 
 ## Funcionalidades preparadas
 
