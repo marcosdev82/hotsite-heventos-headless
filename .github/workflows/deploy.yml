@@ -115,6 +115,7 @@ jobs:
     if: always()
     outputs:
       use_webhook: ${{ steps.strategy.outputs.use_webhook }}
+      invalid_webhook: ${{ steps.strategy.outputs.invalid_webhook }}
       use_ssh: ${{ steps.strategy.outputs.use_ssh }}
       missing_ssh_fields: ${{ steps.strategy.outputs.missing_ssh_fields }}
       has_runtime_env: ${{ steps.strategy.outputs.has_runtime_env }}
@@ -134,7 +135,17 @@ jobs:
         run: |
           missing_ssh_fields=""
           missing_runtime_env_fields=""
-          if [ -n "$DEPLOY_WEBHOOK_URL" ]; then echo "use_webhook=true" >> "$GITHUB_OUTPUT"; else echo "use_webhook=false" >> "$GITHUB_OUTPUT"; fi
+          webhook_url="$(printf '%s' "${DEPLOY_WEBHOOK_URL:-}" | tr -d '\r' | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')"
+          if [ -z "$webhook_url" ]; then
+            echo "use_webhook=false" >> "$GITHUB_OUTPUT"
+            echo "invalid_webhook=false" >> "$GITHUB_OUTPUT"
+          elif [[ "$webhook_url" =~ ^https?://[^[:space:]]+$ ]]; then
+            echo "use_webhook=true" >> "$GITHUB_OUTPUT"
+            echo "invalid_webhook=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "use_webhook=false" >> "$GITHUB_OUTPUT"
+            echo "invalid_webhook=true" >> "$GITHUB_OUTPUT"
+          fi
           if [ -z "$SSH_HOST" ]; then missing_ssh_fields="SSH_HOST"; fi
           if [ -z "$SSH_USER" ]; then missing_ssh_fields="${missing_ssh_fields:+$missing_ssh_fields,}SSH_USER"; fi
           if [ -z "$SSH_PRIVATE_KEY" ]; then missing_ssh_fields="${missing_ssh_fields:+$missing_ssh_fields,}SSH_PRIVATE_KEY"; fi
@@ -152,9 +163,14 @@ jobs:
     if: always()
     steps:
       - name: Execute or warn
+        env:
+          DEPLOY_WEBHOOK_URL: ${{ secrets.DEPLOY_WEBHOOK_URL || vars.DEPLOY_WEBHOOK_URL }}
         run: |
+          webhook_url="$(printf '%s' "${DEPLOY_WEBHOOK_URL:-}" | tr -d '\r' | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')"
           if [ "${{ needs.deploy-strategy.outputs.use_webhook }}" = "true" ]; then
-            curl --fail --show-error --silent --request POST "${{ secrets.DEPLOY_WEBHOOK_URL || vars.DEPLOY_WEBHOOK_URL }}"
+            curl --fail --show-error --silent --request POST "$webhook_url"
+          elif [ "${{ needs.deploy-strategy.outputs.invalid_webhook }}" = "true" ]; then
+            echo "::warning::DEPLOY_WEBHOOK_URL inválida; use uma URL HTTP(S) completa."
           else
             echo "::warning::Webhook não configurado; job executado sem deploy."
           fi
