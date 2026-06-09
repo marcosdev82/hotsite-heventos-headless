@@ -102,6 +102,7 @@ jobs:
     outputs:
       use_webhook: ${{ steps.strategy.outputs.use_webhook }}
       use_ssh: ${{ steps.strategy.outputs.use_ssh }}
+      missing_ssh_fields: ${{ steps.strategy.outputs.missing_ssh_fields }}
     if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
 
     steps:
@@ -113,16 +114,40 @@ jobs:
           SSH_USER: ${{ secrets.SSH_USER || vars.SSH_USER }}
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         run: |
+          missing_ssh_fields=""
+
           if [ -n "$DEPLOY_WEBHOOK_URL" ]; then
             echo "use_webhook=true" >> "$GITHUB_OUTPUT"
           else
             echo "use_webhook=false" >> "$GITHUB_OUTPUT"
           fi
 
-          if [ -n "$SSH_HOST" ] && [ -n "$SSH_USER" ] && [ -n "$SSH_PRIVATE_KEY" ]; then
+          if [ -z "$SSH_HOST" ]; then
+            missing_ssh_fields="SSH_HOST"
+          fi
+
+          if [ -z "$SSH_USER" ]; then
+            if [ -n "$missing_ssh_fields" ]; then
+              missing_ssh_fields="$missing_ssh_fields,SSH_USER"
+            else
+              missing_ssh_fields="SSH_USER"
+            fi
+          fi
+
+          if [ -z "$SSH_PRIVATE_KEY" ]; then
+            if [ -n "$missing_ssh_fields" ]; then
+              missing_ssh_fields="$missing_ssh_fields,SSH_PRIVATE_KEY"
+            else
+              missing_ssh_fields="SSH_PRIVATE_KEY"
+            fi
+          fi
+
+          if [ -z "$missing_ssh_fields" ]; then
             echo "use_ssh=true" >> "$GITHUB_OUTPUT"
+            echo "missing_ssh_fields=none" >> "$GITHUB_OUTPUT"
           else
             echo "use_ssh=false" >> "$GITHUB_OUTPUT"
+            echo "missing_ssh_fields=$missing_ssh_fields" >> "$GITHUB_OUTPUT"
           fi
 
   deploy-webhook:
@@ -179,4 +204,5 @@ jobs:
         run: |
           echo "Nenhuma estratégia de deploy configurada."
           echo "Configure DEPLOY_WEBHOOK_URL (recomendado) ou SSH_HOST+SSH_USER (secret ou variable) e SSH_PRIVATE_KEY (secret)."
+          echo "Campos SSH ausentes detectados: ${{ needs.deploy-strategy.outputs.missing_ssh_fields }}"
           exit 1
