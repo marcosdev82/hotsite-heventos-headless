@@ -101,6 +101,7 @@ jobs:
     needs: docker
     outputs:
       use_webhook: ${{ steps.strategy.outputs.use_webhook }}
+      use_ssh: ${{ steps.strategy.outputs.use_ssh }}
     if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
 
     steps:
@@ -108,11 +109,20 @@ jobs:
         id: strategy
         env:
           DEPLOY_WEBHOOK_URL: ${{ secrets.DEPLOY_WEBHOOK_URL }}
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         run: |
           if [ -n "$DEPLOY_WEBHOOK_URL" ]; then
             echo "use_webhook=true" >> "$GITHUB_OUTPUT"
           else
             echo "use_webhook=false" >> "$GITHUB_OUTPUT"
+          fi
+
+          if [ -n "$SSH_HOST" ] && [ -n "$SSH_USER" ] && [ -n "$SSH_PRIVATE_KEY" ]; then
+            echo "use_ssh=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "use_ssh=false" >> "$GITHUB_OUTPUT"
           fi
 
   deploy-webhook:
@@ -132,7 +142,7 @@ jobs:
     name: Deploy to Server via SSH
     runs-on: ubuntu-latest
     needs: deploy-strategy
-    if: needs.deploy-strategy.outputs.use_webhook != 'true'
+    if: needs.deploy-strategy.outputs.use_webhook != 'true' && needs.deploy-strategy.outputs.use_ssh == 'true'
 
     steps:
       - name: Deploy via SSH
@@ -157,3 +167,16 @@ jobs:
               -e NEXT_PUBLIC_SITE_URL="${{ secrets.NEXT_PUBLIC_SITE_URL }}" \
               -e FAUST_SECRET_KEY="${{ secrets.FAUST_SECRET_KEY }}" \
               ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+
+  deploy-config-error:
+    name: Missing Deploy Configuration
+    runs-on: ubuntu-latest
+    needs: deploy-strategy
+    if: needs.deploy-strategy.outputs.use_webhook != 'true' && needs.deploy-strategy.outputs.use_ssh != 'true'
+
+    steps:
+      - name: Fail with clear message
+        run: |
+          echo "Nenhuma estratégia de deploy configurada."
+          echo "Configure DEPLOY_WEBHOOK_URL (recomendado) ou SSH_HOST/SSH_USER/SSH_PRIVATE_KEY."
+          exit 1
