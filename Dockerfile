@@ -4,13 +4,13 @@ FROM node:22-alpine AS deps
 WORKDIR /app
 RUN apk add --no-cache libc6-compat
 
-COPY frontend/package*.json ./
+COPY package*.json ./
 RUN if [ -f package-lock.json ]; then npm ci --legacy-peer-deps; else npm install --legacy-peer-deps; fi
 
 FROM node:22-alpine AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
-COPY frontend/ ./
+COPY . ./
 
 ARG NEXT_PUBLIC_WORDPRESS_URL
 ARG NEXT_PUBLIC_GRAPHQL_ENDPOINT
