@@ -107,7 +107,6 @@ jobs:
     outputs:
       use_webhook: ${{ steps.strategy.outputs.use_webhook }}
       use_ssh: ${{ steps.strategy.outputs.use_ssh }}
-      webhook_url: ${{ steps.strategy.outputs.webhook_url }}
       missing_ssh_fields: ${{ steps.strategy.outputs.missing_ssh_fields }}
       has_runtime_env: ${{ steps.strategy.outputs.has_runtime_env }}
       missing_runtime_env_fields: ${{ steps.strategy.outputs.missing_runtime_env_fields }}
@@ -132,10 +131,8 @@ jobs:
 
           if [ -n "$webhook_url" ] && [[ "$webhook_url" =~ ^https?://[^[:space:]]+$ ]]; then
             echo "use_webhook=true" >> "$GITHUB_OUTPUT"
-            echo "webhook_url=$webhook_url" >> "$GITHUB_OUTPUT"
           else
             echo "use_webhook=false" >> "$GITHUB_OUTPUT"
-            echo "webhook_url=" >> "$GITHUB_OUTPUT"
           fi
 
           [ -z "${SSH_HOST:-}" ] && missing_ssh_fields="SSH_HOST"
@@ -170,9 +167,11 @@ jobs:
     if: needs.deploy-strategy.outputs.use_webhook == 'true'
     steps:
       - name: Trigger webhook
+        env:
+          DEPLOY_WEBHOOK_URL: ${{ secrets.DEPLOY_WEBHOOK_URL || vars.DEPLOY_WEBHOOK_URL }}
         run: |
           set -euo pipefail
-          curl --fail --show-error --silent --request POST "${{ needs.deploy-strategy.outputs.webhook_url }}"
+          curl --fail --show-error --silent --request POST "${DEPLOY_WEBHOOK_URL}"
           echo "Webhook deploy disparado com sucesso."
 
   deploy-ssh:
