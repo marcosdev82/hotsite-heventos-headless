@@ -24,6 +24,23 @@ export const GET_ALL_CONTENT_URIS = `
         modified
       }
     }
+  }
+`;
+
+export const GET_ALL_CONTENT_URIS_WITH_EVENTS = `
+  query GetAllContentUrisWithEvents {
+    pages(first: 100, where: { status: PUBLISH }) {
+      nodes {
+        uri
+        modified
+      }
+    }
+    posts(first: 100, where: { status: PUBLISH }) {
+      nodes {
+        uri
+        modified
+      }
+    }
     eventos: eventos(first: 100, where: { status: PUBLISH }) {
       nodes {
         uri

@@ -14,7 +14,16 @@ export async function Header() {
   menuItems = await getMainMenu().catch(() => []);
 
   if (!menuItems.length) {
-    menuItems = await getMenuByLocation("PRIMARY").catch(() => []);
+    console.log(
+      "[menu] Header fallback: getMainMenu vazio. Tentando location PRINCIPAL.",
+    );
+    menuItems = await getMenuByLocation("PRINCIPAL").catch(() => []);
+  }
+
+  if (!menuItems.length) {
+    console.log(
+      "[menu] Header sem itens após fallback. Verifique menu 'Principal' e location PRINCIPAL no WordPress.",
+    );
   }
 
   const siteTitle = settings.generalSettings?.title || "Hotsite de Eventos";

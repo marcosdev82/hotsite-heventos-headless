@@ -10,7 +10,7 @@ export async function Footer() {
   try {
     [settings, footerMenu] = await Promise.all([
       getSiteSettings(),
-      getMenuByLocation("FOOTER"),
+      getMenuByLocation("PRINCIPAL"),
     ]);
   } catch {
     // WordPress indisponível durante build ou desenvolvimento offline

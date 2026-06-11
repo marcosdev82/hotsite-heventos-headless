@@ -39,8 +39,7 @@ Instale e ative os plugins:
 
 Registre as localizações de menu no WordPress:
 
-- `PRIMARY` — menu principal
-- `FOOTER` — menu do rodapé
+- `PRINCIPAL` — menu principal (conforme schema WPGraphQL atual)
 
 ### FaustWP
 
@@ -61,8 +60,15 @@ Edite `.env.local`:
 NEXT_PUBLIC_WORDPRESS_URL=http://localhost:8080
 NEXT_PUBLIC_GRAPHQL_ENDPOINT=http://localhost:8080/graphql
 NEXT_PUBLIC_SITE_URL=http://localhost:3000
+NEXT_PUBLIC_ENABLE_EVENTOS=false
 FAUST_SECRET_KEY=sua-chave-secreta
 NODE_ENV=development
+```
+
+Se o seu WordPress expõe o CPT `evento` no WPGraphQL (campo `eventos` em `RootQuery`), altere para:
+
+```env
+NEXT_PUBLIC_ENABLE_EVENTOS=true
 ```
 
 ```bash

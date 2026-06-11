@@ -8,6 +8,15 @@ function getEnvVar(key: string, fallback = ""): string {
   return process.env[key]?.trim() || fallback;
 }
 
+function getBooleanEnvVar(key: string, fallback = false): boolean {
+  const value = getEnvVar(key);
+  if (!value) {
+    return fallback;
+  }
+
+  return ["1", "true", "yes", "on"].includes(value.toLowerCase());
+}
+
 export const env = {
   wordpressUrl: getEnvVar(
     "NEXT_PUBLIC_WORDPRESS_URL",
@@ -19,6 +28,7 @@ export const env = {
   ),
   siteUrl: getEnvVar("NEXT_PUBLIC_SITE_URL", "http://localhost:3000"),
   faustSecretKey: getEnvVar("FAUST_SECRET_KEY"),
+  enableEventos: getBooleanEnvVar("NEXT_PUBLIC_ENABLE_EVENTOS", false),
   isProduction: process.env.NODE_ENV === "production",
 } as const;
 

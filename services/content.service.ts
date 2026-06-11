@@ -1,6 +1,8 @@
 import { fetchGraphQL } from "@/lib/graphql-client";
+import { env } from "@/lib/env";
 import {
   GET_ALL_CONTENT_URIS,
+  GET_ALL_CONTENT_URIS_WITH_EVENTS,
   GET_EVENTS,
   GET_NODE_BY_URI,
   GET_POSTS,
@@ -60,7 +62,11 @@ export async function getNodeByUri(
 
 export async function getAllContentUris(): Promise<SitemapEntry[]> {
   try {
-    const data = await fetchGraphQL<AllUrisResponse>(GET_ALL_CONTENT_URIS, {
+    const query = env.enableEventos
+      ? GET_ALL_CONTENT_URIS_WITH_EVENTS
+      : GET_ALL_CONTENT_URIS;
+
+    const data = await fetchGraphQL<AllUrisResponse>(query, {
       revalidate: 3600,
       tags: ["wordpress", "sitemap"],
     });
@@ -92,6 +98,15 @@ export async function getPosts(first = 10, after?: string) {
 }
 
 export async function getEvents(first = 10, after?: string) {
+  if (!env.enableEventos) {
+    return {
+      eventos: {
+        pageInfo: { hasNextPage: false, endCursor: null },
+        nodes: [],
+      },
+    };
+  }
+
   try {
     return await fetchGraphQL<EventsResponse>(GET_EVENTS, {
       variables: { first, after },
