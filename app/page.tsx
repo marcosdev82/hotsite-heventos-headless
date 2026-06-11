@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Bricolage_Grotesque, Plus_Jakarta_Sans } from "next/font/google";
+import { EventCountdown } from "@/components/content/EventCountdown";
 import { MainLayout } from "@/layouts/MainLayout";
 
 const display = Bricolage_Grotesque({
@@ -122,6 +123,11 @@ export default function HomePage() {
             </div>
           </div>
         </section>
+
+        <EventCountdown
+          eventIsoDate="2026-08-20T08:00:00-03:00"
+          subtitle="Abertura oficial em 20 de agosto de 2026, com trilhas clínicas, mesas interativas e networking científico."
+        />
 
         <section className="mx-auto grid max-w-7xl gap-6 px-4 py-16 sm:px-6 lg:grid-cols-3 lg:px-8">
           {tracks.map((track) => (

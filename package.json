@@ -8,7 +8,9 @@
     "start": "faust start",
     "lint": "eslint",
     "generate": "faust generatePossibleTypes",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "seed:wp": "bash scripts/wordpress-seed-congresso.sh",
+    "seed:wp:docker": "bash scripts/wp-seed-congresso.sh"
   },
   "dependencies": {
     "@apollo/client": "^3.14.1",

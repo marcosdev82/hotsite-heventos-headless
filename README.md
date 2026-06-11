@@ -94,6 +94,54 @@ Alterações de cor, tipografia, espaçamento, bordas e gradientes feitas no edi
 | `npm run lint` | ESLint |
 | `npm run typecheck` | Verificação TypeScript |
 | `npm run generate` | Gera `possibleTypes.json` via introspection |
+| `npm run seed:wp` | Executa o seeder de páginas/menu no WordPress via WP-CLI |
+| `npm run seed:wp:docker` | Executa o seeder no container Docker do WordPress |
+
+## Seeder de demonstração (WordPress)
+
+Foi adicionado um seeder idempotente em `scripts/wordpress-seed-congresso.sh` para preparar um ambiente completo de congresso para demonstração.
+
+O que ele cria/atualiza automaticamente:
+
+- Páginas: Home, Congresso, Inscrições, Palestrantes, Programação, Trabalhos, Agência de Turismo, Fale Conosco
+- Conteúdo fictício realista em blocos Gutenberg para cada página
+- Imagens placeholder/fictícias para banners e seções
+- Menu principal na ordem solicitada
+- Menu de rodapé sincronizado
+- Posts de exemplo para demonstrar listagens de conteúdo
+- Conteúdo do CPT `evento` (quando o post type existir)
+
+Ordem do menu principal criada pelo seeder:
+
+1. Home
+2. Congresso
+3. Inscrições
+4. Palestrantes
+5. Programação
+6. Trabalhos
+7. Agência de Turismo
+8. Fale Conosco
+
+Execução com WP-CLI local:
+
+```bash
+npm run seed:wp
+```
+
+Execução em ambiente Docker (container WordPress):
+
+```bash
+WP_CONTAINER=wordpress WP_PATH=/var/www/html npm run seed:wp:docker
+```
+
+Variáveis opcionais:
+
+- `WP_CLI_BIN` (default: `wp`)
+- `WP_CLI_ARGS` (exemplo: `--allow-root --path=/var/www/html`)
+- `SEED_SITE_TITLE`
+- `SEED_SITE_TAGLINE`
+- `SEED_PRIMARY_MENU_NAME`
+- `SEED_FOOTER_MENU_NAME`
 
 ## Docker
 
