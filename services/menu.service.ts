@@ -19,32 +19,44 @@ type MainMenuResponse = {
 };
 
 export async function getMainMenu(): Promise<MenuItem[]> {
-  const data = await fetchGraphQL<MainMenuResponse>(GET_MAIN_MENU, {
-    tags: ["wordpress", "menus", "menu-name:Principal"],
-  });
+  try {
+    const data = await fetchGraphQL<MainMenuResponse>(GET_MAIN_MENU, {
+      tags: ["wordpress", "menus", "menu-name:Principal"],
+    });
 
-  return data.menu?.menuItems?.nodes ?? [];
+    return data.menu?.menuItems?.nodes ?? [];
+  } catch {
+    return [];
+  }
 }
 
 export async function getMenuByLocation(
   location: string,
 ): Promise<MenuItem[]> {
-  const data = await fetchGraphQL<MenuByLocationResponse>(
-    GET_MENU_BY_LOCATION,
-    {
-      variables: { location },
-      tags: ["wordpress", "menus", `menu-location:${location}`],
-    },
-  );
+  try {
+    const data = await fetchGraphQL<MenuByLocationResponse>(
+      GET_MENU_BY_LOCATION,
+      {
+        variables: { location },
+        tags: ["wordpress", "menus", `menu-location:${location}`],
+      },
+    );
 
-  return data.menuItems?.nodes ?? [];
+    return data.menuItems?.nodes ?? [];
+  } catch {
+    return [];
+  }
 }
 
 export async function getMenuBySlug(slug: string): Promise<Menu | null> {
-  const data = await fetchGraphQL<MenuBySlugResponse>(GET_MENU_BY_SLUG, {
-    variables: { slug },
-    tags: ["wordpress", "menus", `menu-slug:${slug}`],
-  });
+  try {
+    const data = await fetchGraphQL<MenuBySlugResponse>(GET_MENU_BY_SLUG, {
+      variables: { slug },
+      tags: ["wordpress", "menus", `menu-slug:${slug}`],
+    });
 
-  return data.menu ?? null;
+    return data.menu ?? null;
+  } catch {
+    return null;
+  }
 }
