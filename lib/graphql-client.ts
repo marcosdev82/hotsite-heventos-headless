@@ -40,6 +40,20 @@ export async function fetchGraphQL<T>(
 ): Promise<T> {
   const operationName = getOperationName(query);
 
+  if (!env.graphqlEndpoint) {
+    const message =
+      "GraphQL endpoint não configurado/ inválido. Defina NEXT_PUBLIC_GRAPHQL_ENDPOINT com a URL pública do WordPress (ex: https://seu-wp.com/graphql).";
+
+    console.log("[graphql] Invalid endpoint", {
+      endpoint: env.graphqlEndpoint,
+      operationName,
+      tags,
+      message,
+    });
+
+    throw new GraphQLRequestError(message);
+  }
+
   const headers: HeadersInit = {
     "Content-Type": "application/json",
   };
