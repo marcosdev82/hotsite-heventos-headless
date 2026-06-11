@@ -47,3 +47,32 @@ export const GET_MENU_BY_SLUG = `
     }
   }
 `;
+
+export const GET_MAIN_MENU = `
+  query GetMainMenu {
+    menu(id: "Principal", idType: NAME) {
+      id
+      name
+      menuItems(first: 100) {
+        nodes {
+          id
+          label
+          path
+          url
+          target
+          parentId
+          childItems {
+            nodes {
+              id
+              label
+              path
+              url
+              target
+              parentId
+            }
+          }
+        }
+      }
+    }
+  }
+`;

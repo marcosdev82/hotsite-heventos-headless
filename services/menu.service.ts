@@ -1,5 +1,6 @@
 import { fetchGraphQL } from "@/lib/graphql-client";
 import {
+  GET_MAIN_MENU,
   GET_MENU_BY_LOCATION,
   GET_MENU_BY_SLUG,
 } from "@/graphql/queries/menus";
@@ -12,6 +13,18 @@ type MenuByLocationResponse = {
 type MenuBySlugResponse = {
   menu: Menu | null;
 };
+
+type MainMenuResponse = {
+  menu: Menu | null;
+};
+
+export async function getMainMenu(): Promise<MenuItem[]> {
+  const data = await fetchGraphQL<MainMenuResponse>(GET_MAIN_MENU, {
+    tags: ["wordpress", "menus", "menu-name:Principal"],
+  });
+
+  return data.menu?.menuItems?.nodes ?? [];
+}
 
 export async function getMenuByLocation(
   location: string,

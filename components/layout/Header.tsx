@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Navigation } from "@/components/layout/Navigation";
-import { getMenuByLocation } from "@/services/menu.service";
+import { getMainMenu, getMenuByLocation } from "@/services/menu.service";
 import { getSiteSettings } from "@/services/site-settings.service";
 import type { SiteSettings } from "@/types/wordpress";
 
@@ -9,10 +9,11 @@ export async function Header() {
   let menuItems: Awaited<ReturnType<typeof getMenuByLocation>> = [];
 
   try {
-    [settings, menuItems] = await Promise.all([
-      getSiteSettings(),
-      getMenuByLocation("PRIMARY"),
-    ]);
+    [settings, menuItems] = await Promise.all([getSiteSettings(), getMainMenu()]);
+
+    if (!menuItems.length) {
+      menuItems = await getMenuByLocation("PRIMARY");
+    }
   } catch {
     // WordPress indisponível durante build ou desenvolvimento offline
   }

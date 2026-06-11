@@ -25,6 +25,7 @@ export type MenuItem = {
   id: string;
   label: string;
   path: string;
+  url?: string | null;
   target?: string | null;
   parentId?: string | null;
   childItems?: {
