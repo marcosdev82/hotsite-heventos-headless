@@ -45,46 +45,76 @@ export async function getNodeByUri(
   uri: string,
   preview = false,
 ): Promise<ContentNode | null> {
-  const data = await fetchGraphQL<NodeByUriResponse>(GET_NODE_BY_URI, {
-    variables: { uri },
-    preview,
-    tags: ["wordpress", `uri:${uri}`],
-  });
+  try {
+    const data = await fetchGraphQL<NodeByUriResponse>(GET_NODE_BY_URI, {
+      variables: { uri },
+      preview,
+      tags: ["wordpress", `uri:${uri}`],
+    });
 
-  return data.nodeByUri ?? null;
+    return data.nodeByUri ?? null;
+  } catch {
+    return null;
+  }
 }
 
 export async function getAllContentUris(): Promise<SitemapEntry[]> {
-  const data = await fetchGraphQL<AllUrisResponse>(GET_ALL_CONTENT_URIS, {
-    revalidate: 3600,
-    tags: ["wordpress", "sitemap"],
-  });
+  try {
+    const data = await fetchGraphQL<AllUrisResponse>(GET_ALL_CONTENT_URIS, {
+      revalidate: 3600,
+      tags: ["wordpress", "sitemap"],
+    });
 
-  return [
-    ...(data.pages?.nodes ?? []),
-    ...(data.posts?.nodes ?? []),
-    ...(data.eventos?.nodes ?? []),
-  ];
+    return [
+      ...(data.pages?.nodes ?? []),
+      ...(data.posts?.nodes ?? []),
+      ...(data.eventos?.nodes ?? []),
+    ];
+  } catch {
+    return [];
+  }
 }
 
 export async function getPosts(first = 10, after?: string) {
-  return fetchGraphQL<PostsResponse>(GET_POSTS, {
-    variables: { first, after },
-    tags: ["wordpress", "posts"],
-  });
+  try {
+    return await fetchGraphQL<PostsResponse>(GET_POSTS, {
+      variables: { first, after },
+      tags: ["wordpress", "posts"],
+    });
+  } catch {
+    return {
+      posts: {
+        pageInfo: { hasNextPage: false, endCursor: null },
+        nodes: [],
+      },
+    };
+  }
 }
 
 export async function getEvents(first = 10, after?: string) {
-  return fetchGraphQL<EventsResponse>(GET_EVENTS, {
-    variables: { first, after },
-    tags: ["wordpress", "eventos"],
-  });
+  try {
+    return await fetchGraphQL<EventsResponse>(GET_EVENTS, {
+      variables: { first, after },
+      tags: ["wordpress", "eventos"],
+    });
+  } catch {
+    return {
+      eventos: {
+        pageInfo: { hasNextPage: false, endCursor: null },
+        nodes: [],
+      },
+    };
+  }
 }
 
 export async function searchContent(search: string, first = 10) {
-  return fetchGraphQL<SearchResponse>(SEARCH_CONTENT, {
-    variables: { search, first },
-    revalidate: 0,
-    tags: ["wordpress", "search"],
-  });
+  try {
+    return await fetchGraphQL<SearchResponse>(SEARCH_CONTENT, {
+      variables: { search, first },
+      revalidate: 0,
+      tags: ["wordpress", "search"],
+    });
+  } catch {
+    return { contentNodes: { nodes: [] } };
+  }
 }

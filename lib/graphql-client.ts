@@ -41,15 +41,24 @@ export async function fetchGraphQL<T>(
     headers["X-FaustWP-Preview"] = "true";
   }
 
-  const response = await fetch(env.graphqlEndpoint, {
-    method: "POST",
-    headers,
-    body: JSON.stringify({ query, variables }),
-    next: {
-      revalidate: preview ? 0 : revalidate,
-      tags,
-    },
-  });
+  let response: Response;
+
+  try {
+    response = await fetch(env.graphqlEndpoint, {
+      method: "POST",
+      headers,
+      body: JSON.stringify({ query, variables }),
+      next: {
+        revalidate: preview ? 0 : revalidate,
+        tags,
+      },
+    });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Erro de rede";
+    throw new GraphQLRequestError(
+      `GraphQL network error at ${env.graphqlEndpoint}: ${message}`,
+    );
+  }
 
   if (!response.ok) {
     throw new GraphQLRequestError(

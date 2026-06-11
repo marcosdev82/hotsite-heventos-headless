@@ -8,14 +8,13 @@ export async function Header() {
   let settings: SiteSettings = {};
   let menuItems: Awaited<ReturnType<typeof getMenuByLocation>> = [];
 
-  try {
-    [settings, menuItems] = await Promise.all([getSiteSettings(), getMainMenu()]);
+  settings = await getSiteSettings().catch(() => ({}));
 
-    if (!menuItems.length) {
-      menuItems = await getMenuByLocation("PRIMARY");
-    }
-  } catch {
-    // WordPress indisponível durante build ou desenvolvimento offline
+  // Fallback em cascata para evitar menu vazio em produção quando um endpoint falha.
+  menuItems = await getMainMenu().catch(() => []);
+
+  if (!menuItems.length) {
+    menuItems = await getMenuByLocation("PRIMARY").catch(() => []);
   }
 
   const siteTitle = settings.generalSettings?.title || "Hotsite de Eventos";
