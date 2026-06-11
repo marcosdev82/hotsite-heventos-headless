@@ -3,15 +3,12 @@ import type { Metadata } from "next";
 import { ContentTemplate } from "@/components/content/ContentTemplate";
 import { MainLayout } from "@/layouts/MainLayout";
 import { buildContentMetadata } from "@/lib/seo";
-import {
-  getNodeByUri,
-  normalizeUri,
-} from "@/services/content.service";
+import { getNodeByUri, normalizeUri } from "@/services/content.service";
 
 export const revalidate = 60;
 
 type PageProps = {
-  params: Promise<{ slug?: string[] }>;
+  params: Promise<{ slug: string[] }>;
 };
 
 export async function generateMetadata({

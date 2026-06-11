@@ -1,6 +1,3 @@
-import { EDITOR_BLOCKS_FRAGMENT } from "@/graphql/fragments/blocks";
-import { SEO_FRAGMENT } from "@/graphql/fragments/seo";
-
 export const CONTENT_NODE_FRAGMENT = `
   fragment ContentNodeFields on ContentNode {
     databaseId
@@ -27,12 +24,6 @@ export const CONTENT_NODE_FRAGMENT = `
         }
       }
     }
-    ... on ContentNodeToEditLastConnectionEdge {
-      modified
-    }
-    ... on NodeWithEditorBlocks {
-      ...EditorBlocksFields
-    }
     ... on Post {
       date
       categories {
@@ -51,20 +42,5 @@ export const CONTENT_NODE_FRAGMENT = `
     ... on Page {
       date
     }
-    ... on Evento {
-      date
-      eventFields {
-        dataInicio
-        dataFim
-        local
-      }
-    }
-    ... on NodeWithYoastSEO {
-      seo {
-        ...SeoFields
-      }
-    }
   }
-  ${EDITOR_BLOCKS_FRAGMENT}
-  ${SEO_FRAGMENT}
 `;
