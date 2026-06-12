@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { WordPressStyles } from "@/components/gutenberg/WordPressStyles";
-import { FaustProvider } from "@/components/providers/FaustProvider";
 import { buildDefaultMetadata } from "@/lib/seo";
 import { getSiteSettings } from "@/services/site-settings.service";
 import "@/styles/blocks.scss";
@@ -30,10 +29,8 @@ export default function RootLayout({
   return (
     <html lang="pt-BR" className={`${inter.variable} h-full`}>
       <body className="min-h-full flex flex-col bg-background font-sans text-foreground antialiased">
-        <FaustProvider>
-          <WordPressStyles />
-          {children}
-        </FaustProvider>
+        <WordPressStyles />
+        {children}
       </body>
     </html>
   );
