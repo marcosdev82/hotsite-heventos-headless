@@ -17,6 +17,7 @@
     "@faustwp/blocks": "^6.1.8",
     "@faustwp/cli": "^3.3.4",
     "@faustwp/core": "^3.4.1",
+    "@wordpress/block-library": "^9.48.0",
     "@wordpress/style-engine": "^2.21.0",
     "graphql": "^16.12.0",
     "next": "^15.5.12",
