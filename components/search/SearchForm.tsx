@@ -26,9 +26,9 @@ export function SearchForm() {
         <button
           type="submit"
           disabled={isSearching || isPending}
-          className="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground disabled:opacity-60"
+          className="btn btn-efeito rounded-lg px-4 py-2 text-sm font-medium disabled:opacity-60"
         >
-          Buscar
+          <span>Buscar</span>
         </button>
       </form>
 

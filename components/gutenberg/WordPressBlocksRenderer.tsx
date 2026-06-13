@@ -13,6 +13,9 @@ type WordPressBlocksRendererProps = {
   fallbackHtml?: string | null;
 };
 
+const ENTRY_CONTENT_CLASSNAME =
+  "entry-content wp-block-post-content is-layout-constrained";
+
 export function WordPressBlocksRenderer({
   editorBlocks,
   fallbackHtml,
@@ -24,7 +27,7 @@ export function WordPressBlocksRenderer({
 
     return (
       <WordPressBlocksProvider config={{ blocks }}>
-        <div className="entry-content wp-block-post-content is-layout-constrained">
+        <div className={ENTRY_CONTENT_CLASSNAME}>
           <WordPressBlocksViewer blocks={blockList} />
         </div>
       </WordPressBlocksProvider>
@@ -34,7 +37,7 @@ export function WordPressBlocksRenderer({
   if (fallbackHtml) {
     return (
       <div
-        className="entry-content wp-block-post-content is-layout-constrained"
+        className={ENTRY_CONTENT_CLASSNAME}
         dangerouslySetInnerHTML={{ __html: fallbackHtml }}
       />
     );

@@ -69,18 +69,18 @@ export default function HomePage() {
         <section className="relative overflow-hidden border-b border-border/60 px-4 pb-16 pt-14 sm:px-6 lg:px-8 lg:pb-24 lg:pt-20">
           <div className="conference-ambient" aria-hidden />
           <div className="relative mx-auto max-w-7xl">
-            <p className="stagger-fade text-sm font-semibold uppercase tracking-[0.22em] text-[#A43E2E]">
+            <p className="stagger-fade text-sm font-semibold uppercase tracking-[0.22em] text-primary">
               Congresso de Atualização em Saúde
             </p>
             <h1
-              className={`${display.className} stagger-fade mt-5 max-w-4xl text-balance text-4xl font-extrabold leading-tight text-[#0E2A47] sm:text-5xl lg:text-6xl`}
+              className={`${display.className} stagger-fade mt-5 max-w-4xl text-balance text-4xl font-extrabold leading-tight text-foreground sm:text-5xl lg:text-6xl`}
               style={{ animationDelay: "80ms" }}
             >
               Um encontro multidisciplinar para transformar prática clínica em
               resultado real.
             </h1>
             <p
-              className="stagger-fade mt-6 max-w-2xl text-pretty text-base leading-relaxed text-slate-700 sm:text-lg"
+              className="stagger-fade mt-6 max-w-2xl text-pretty text-base leading-relaxed text-foreground/80 sm:text-lg"
               style={{ animationDelay: "160ms" }}
             >
               Três dias de conteúdo estratégico, networking qualificado e
@@ -93,15 +93,15 @@ export default function HomePage() {
             >
               <Link
                 href="#inscricao"
-                className="rounded-full bg-[#A43E2E] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#8D3527]"
+                className="btn btn-efeito rounded-full px-6 py-3 text-sm font-semibold"
               >
-                Garantir inscrição
+                <span>Garantir inscrição</span>
               </Link>
               <Link
                 href="#programacao"
-                className="rounded-full border border-[#0E2A47]/30 bg-white/80 px-6 py-3 text-sm font-semibold text-[#0E2A47] transition hover:bg-white"
+                className="btn btn-efeito rounded-full px-6 py-3 text-sm font-semibold"
               >
-                Ver programação
+                <span>Ver programação</span>
               </Link>
             </div>
 
@@ -109,13 +109,13 @@ export default function HomePage() {
               {highlights.map((item, index) => (
                 <article
                   key={item.label}
-                  className="stagger-fade rounded-2xl border border-[#0E2A47]/10 bg-white/75 p-4 backdrop-blur"
+                  className="stagger-fade rounded-2xl border border-border/35 bg-background/70 p-4 backdrop-blur"
                   style={{ animationDelay: `${260 + index * 70}ms` }}
                 >
-                  <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#A43E2E]">
+                  <p className="text-xs font-semibold uppercase tracking-[0.14em] text-primary">
                     {item.label}
                   </p>
-                  <p className="mt-2 text-sm font-medium text-slate-700">
+                  <p className="mt-2 text-sm font-medium text-foreground/80">
                     {item.value}
                   </p>
                 </article>
@@ -133,27 +133,27 @@ export default function HomePage() {
           {tracks.map((track) => (
             <article
               key={track.title}
-              className="rounded-3xl border border-[#0E2A47]/10 bg-white p-6 shadow-[0_12px_30px_rgba(14,42,71,0.08)]"
+              className="rounded-3xl border border-border/40 bg-card p-6 shadow-[0_12px_30px_rgba(3,4,94,0.14)]"
             >
               <h2
-                className={`${display.className} text-2xl font-bold text-[#0E2A47]`}
+                className={`${display.className} text-2xl font-bold text-foreground`}
               >
                 {track.title}
               </h2>
-              <p className="mt-3 text-sm leading-relaxed text-slate-600">
+              <p className="mt-3 text-sm leading-relaxed text-foreground/75">
                 {track.description}
               </p>
             </article>
           ))}
         </section>
 
-        <section className="border-y border-border/60 bg-[#0E2A47] px-4 py-16 text-white sm:px-6 lg:px-8">
+        <section className="border-y border-border/60 bg-foreground px-4 py-16 text-background sm:px-6 lg:px-8">
           <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[1.2fr_1fr]">
             <div>
               <h2 className={`${display.className} text-3xl font-bold sm:text-4xl`}>
                 Palestrantes confirmados
               </h2>
-              <p className="mt-4 max-w-2xl text-sm text-slate-200 sm:text-base">
+              <p className="mt-4 max-w-2xl text-sm text-background/80 sm:text-base">
                 Especialistas reconhecidos por pesquisa, ensino e aplicação
                 clínica, com palestras objetivas e debates orientados para
                 tomada de decisão.
@@ -162,25 +162,25 @@ export default function HomePage() {
                 {speakers.map((speaker) => (
                   <span
                     key={speaker}
-                    className="rounded-full border border-white/25 bg-white/10 px-4 py-2 text-sm"
+                    className="rounded-full border border-background/25 bg-background/10 px-4 py-2 text-sm"
                   >
                     {speaker}
                   </span>
                 ))}
               </div>
             </div>
-            <div className="rounded-3xl border border-white/20 bg-white/10 p-6 backdrop-blur">
-              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#F7B190]">
+            <div className="rounded-3xl border border-background/25 bg-background/10 p-6 backdrop-blur">
+              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-muted">
                 Local do Evento
               </p>
               <p className="mt-2 text-xl font-semibold">
                 Centro de Convenções Frei Caneca
               </p>
-              <p className="mt-4 text-sm text-slate-100">
+              <p className="mt-4 text-sm text-background/90">
                 Região da Av. Paulista, com acesso rápido a hotéis,
                 gastronomia e mobilidade urbana para toda a equipe.
               </p>
-              <p className="mt-6 text-sm font-semibold text-[#F7B190]">
+              <p className="mt-6 text-sm font-semibold text-muted">
                 Rua Frei Caneca, 569 · Consolação · São Paulo
               </p>
             </div>
@@ -189,10 +189,10 @@ export default function HomePage() {
 
         <section id="programacao" className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
           <div className="mb-8 flex items-end justify-between gap-4">
-            <h2 className={`${display.className} text-3xl font-bold text-[#0E2A47]`}>
+            <h2 className={`${display.className} text-3xl font-bold text-foreground`}>
               Programação resumida
             </h2>
-            <Link href="#programacao" className="text-sm font-semibold text-[#A43E2E] hover:underline">
+            <Link href="#programacao" className="text-sm font-semibold text-primary hover:underline">
               Ver agenda completa
             </Link>
           </div>
@@ -200,13 +200,13 @@ export default function HomePage() {
             {schedule.map((item) => (
               <article
                 key={item.day}
-                className="rounded-2xl border border-[#0E2A47]/10 bg-[#F8FAFC] p-5"
+                className="rounded-2xl border border-border/40 bg-muted/35 p-5"
               >
-                <p className="text-xs font-semibold uppercase tracking-[0.15em] text-[#A43E2E]">
+                <p className="text-xs font-semibold uppercase tracking-[0.15em] text-primary">
                   {item.day}
                 </p>
-                <h3 className="mt-2 text-xl font-bold text-[#0E2A47]">{item.period}</h3>
-                <p className="mt-3 text-sm leading-relaxed text-slate-600">
+                <h3 className="mt-2 text-xl font-bold text-foreground">{item.period}</h3>
+                <p className="mt-3 text-sm leading-relaxed text-foreground/75">
                   {item.focus}
                 </p>
               </article>
@@ -214,13 +214,13 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section id="inscricao" className="border-t border-border/60 bg-[#FFF4EC] px-4 py-16 sm:px-6 lg:px-8">
-          <div className="mx-auto grid max-w-7xl gap-8 rounded-3xl border border-[#A43E2E]/20 bg-white p-8 lg:grid-cols-[1.3fr_1fr]">
+        <section id="inscricao" className="border-t border-border/60 bg-muted/35 px-4 py-16 sm:px-6 lg:px-8">
+          <div className="mx-auto grid max-w-7xl gap-8 rounded-3xl border border-primary/30 bg-background p-8 lg:grid-cols-[1.3fr_1fr]">
             <div>
-              <h2 className={`${display.className} text-3xl font-bold text-[#0E2A47]`}>
+              <h2 className={`${display.className} text-3xl font-bold text-foreground`}>
                 Receba novidades da próxima edição
               </h2>
-              <p className="mt-4 max-w-2xl text-sm leading-relaxed text-slate-600">
+              <p className="mt-4 max-w-2xl text-sm leading-relaxed text-foreground/75">
                 Cadastre seu e-mail para receber abertura de lotes, novos
                 palestrantes e atualização das trilhas científicas.
               </p>
@@ -230,19 +230,19 @@ export default function HomePage() {
                 type="text"
                 name="nome"
                 placeholder="Seu nome"
-                className="rounded-xl border border-[#0E2A47]/15 px-4 py-3 text-sm outline-none transition focus:border-[#A43E2E]"
+                className="rounded-xl border border-foreground/20 bg-background px-4 py-3 text-sm outline-none transition focus:border-primary focus-visible:ring-2 focus-visible:ring-primary/35"
               />
               <input
                 type="email"
                 name="email"
                 placeholder="seu@email.com"
-                className="rounded-xl border border-[#0E2A47]/15 px-4 py-3 text-sm outline-none transition focus:border-[#A43E2E]"
+                className="rounded-xl border border-foreground/20 bg-background px-4 py-3 text-sm outline-none transition focus:border-primary focus-visible:ring-2 focus-visible:ring-primary/35"
               />
               <button
                 type="button"
-                className="rounded-xl bg-[#A43E2E] px-4 py-3 text-sm font-semibold text-white transition hover:bg-[#8D3527]"
+                className="btn btn-efeito rounded-xl px-4 py-3 text-sm font-semibold"
               >
-                Quero receber novidades
+                <span>Quero receber novidades</span>
               </button>
             </form>
           </div>

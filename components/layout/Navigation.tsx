@@ -17,8 +17,8 @@ function NavLink({ item }: { item: MenuItem }) {
     <Link
       href={href}
       target={item.target || undefined}
-      className={`rounded-md px-3 py-2 text-sm font-medium transition-colors hover:text-primary ${
-        isActive ? "text-primary" : "text-foreground/80"
+      className={`rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-muted/45 hover:text-foreground ${
+        isActive ? "bg-muted/55 text-foreground" : "text-foreground/80"
       }`}
     >
       {item.label}

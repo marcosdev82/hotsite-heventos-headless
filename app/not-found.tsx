@@ -11,9 +11,9 @@ export default function NotFound() {
         </p>
         <Link
           href="/"
-          className="mt-8 rounded-lg bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground"
+          className="btn btn-efeito mt-8 rounded-lg px-5 py-2.5 text-sm font-medium"
         >
-          Voltar ao início
+          <span>Voltar ao início</span>
         </Link>
       </section>
     </MainLayout>

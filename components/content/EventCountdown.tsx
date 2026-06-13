@@ -82,16 +82,16 @@ export function EventCountdown({
   ];
 
   return (
-    <section className="border-y border-[#0E2A47]/10 bg-[#F3F8FC] px-4 py-12 sm:px-6 lg:px-8">
+    <section className="border-y border-border/40 bg-muted/35 px-4 py-12 sm:px-6 lg:px-8">
       <div className="mx-auto grid max-w-7xl gap-6 lg:grid-cols-[1fr_auto] lg:items-end">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#A43E2E]">
+          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-primary">
             {title}
           </p>
-          <h2 className="mt-2 text-3xl font-extrabold tracking-tight text-[#0E2A47] sm:text-4xl">
+          <h2 className="mt-2 text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl">
             {countdown?.finished ? "Evento em andamento" : "Faltam poucos dias"}
           </h2>
-          <p className="mt-3 max-w-xl text-sm leading-relaxed text-slate-600 sm:text-base">
+          <p className="mt-3 max-w-xl text-sm leading-relaxed text-foreground/75 sm:text-base">
             {subtitle}
           </p>
         </div>
@@ -100,12 +100,12 @@ export function EventCountdown({
           {items.map((item) => (
             <div
               key={item.label}
-              className="rounded-2xl border border-[#0E2A47]/10 bg-white px-5 py-4 text-center shadow-[0_10px_26px_rgba(14,42,71,0.08)]"
+              className="rounded-2xl border border-border/40 bg-background px-5 py-4 text-center shadow-[0_10px_26px_rgba(3,4,94,0.12)]"
             >
-              <p className="text-3xl font-black leading-none text-[#0E2A47] sm:text-4xl">
+              <p className="text-3xl font-black leading-none text-foreground sm:text-4xl">
                 {item.value}
               </p>
-              <p className="mt-1 text-xs font-semibold uppercase tracking-[0.14em] text-[#A43E2E]">
+              <p className="mt-1 text-xs font-semibold uppercase tracking-[0.14em] text-primary">
                 {item.label}
               </p>
             </div>

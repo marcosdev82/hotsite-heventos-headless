@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { SiteLogo } from "@/components/layout/SiteLogo";
 import { getMenuByLocation } from "@/services/menu.service";
 import { getSiteSettings } from "@/services/site-settings.service";
 import type { SiteSettings } from "@/types/wordpress";
@@ -23,7 +24,12 @@ export async function Footer() {
     <footer className="mt-auto border-t border-border/60 bg-muted/30">
       <div className="mx-auto grid max-w-7xl gap-8 px-4 py-12 sm:px-6 lg:grid-cols-2 lg:px-8">
         <div>
-          <p className="text-lg font-semibold">{siteTitle}</p>
+          <SiteLogo
+            title={siteTitle}
+            className="inline-flex items-center gap-3"
+            imageClassName="h-10 w-auto"
+            titleClassName="text-base font-semibold text-foreground"
+          />
           {description ? (
             <p className="mt-2 max-w-md text-sm text-muted-foreground">
               {description}

@@ -5,6 +5,8 @@
   --color-foreground: var(--foreground);
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
   --color-border: var(--border);
@@ -13,27 +15,16 @@
 }
 
 :root {
-  --background: #ffffff;
-  --foreground: #0f172a;
-  --primary: #2563eb;
-  --primary-foreground: #ffffff;
-  --muted: #f1f5f9;
-  --muted-foreground: #64748b;
-  --border: #e2e8f0;
-  --card: #ffffff;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #020617;
-    --foreground: #f8fafc;
-    --primary: #3b82f6;
-    --primary-foreground: #ffffff;
-    --muted: #1e293b;
-    --muted-foreground: #94a3b8;
-    --border: #334155;
-    --card: #0f172a;
-  }
+  --background: #caf0f8;
+  --foreground: #03045e;
+  --primary: #03045e;
+  --primary-foreground: #caf0f8;
+  --accent: #0077b6;
+  --accent-foreground: #caf0f8;
+  --muted: #90e0ef;
+  --muted-foreground: #03045e;
+  --border: #00b4d8;
+  --card: #caf0f8;
 }
 
 body {
@@ -41,22 +32,31 @@ body {
   color: var(--foreground);
 }
 
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
 .conference-surface {
   background:
-    radial-gradient(circle at 8% 0%, rgba(164, 62, 46, 0.16), transparent 42%),
-    radial-gradient(circle at 92% 10%, rgba(14, 42, 71, 0.14), transparent 36%),
-    linear-gradient(180deg, #fffdf8 0%, #ffffff 24%, #f8fafc 100%);
+    radial-gradient(circle at 8% 0%, rgba(0, 180, 216, 0.26), transparent 42%),
+    radial-gradient(circle at 92% 10%, rgba(0, 119, 182, 0.2), transparent 36%),
+    linear-gradient(180deg, #caf0f8 0%, #90e0ef 54%, #caf0f8 100%);
 }
 
 .conference-ambient {
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(128deg, rgba(255, 255, 255, 0.05), rgba(164, 62, 46, 0.08)),
+    linear-gradient(128deg, rgba(202, 240, 248, 0.14), rgba(0, 180, 216, 0.16)),
     repeating-linear-gradient(
       120deg,
-      rgba(14, 42, 71, 0.08) 0px,
-      rgba(14, 42, 71, 0.08) 1px,
+      rgba(3, 4, 94, 0.08) 0px,
+      rgba(3, 4, 94, 0.08) 1px,
       transparent 1px,
       transparent 24px
     );
@@ -68,6 +68,63 @@ body {
   opacity: 0;
   transform: translateY(10px);
   animation: stagger-fade-in 0.65s ease-out forwards;
+}
+
+.btn {
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  vertical-align: middle;
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn:hover {
+  text-decoration: none;
+}
+
+.btn-efeito {
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+  transition: background-color 220ms ease;
+}
+
+.btn-efeito:hover {
+  background-color: var(--accent);
+}
+
+.btn-efeito > span {
+  position: relative;
+  z-index: 2;
+}
+
+.btn-efeito::after {
+  background: var(--background);
+  content: "";
+  height: 155px;
+  left: -85px;
+  opacity: 0.35;
+  position: absolute;
+  top: -60px;
+  transform: rotate(30deg);
+  transition: all 850ms cubic-bezier(0.19, 1, 0.22, 1);
+  width: 70px;
+  z-index: 1;
+}
+
+.btn-efeito:hover::after {
+  left: 130%;
+}
+
+.btn-efeito:disabled {
+  cursor: not-allowed;
+}
+
+.btn-efeito:disabled::after {
+  display: none;
 }
 
 @keyframes stagger-fade-in {
