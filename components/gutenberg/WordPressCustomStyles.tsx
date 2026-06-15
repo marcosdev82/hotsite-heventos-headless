@@ -1,5 +1,48 @@
 import { env } from "@/lib/env";
 
+type PaletteColor = {
+  slug?: string;
+  color?: string;
+};
+
+type PaletteGradient = {
+  slug?: string;
+  gradient?: string;
+};
+
+type TypographyFontSize = {
+  slug?: string;
+  size?: string;
+};
+
+type TypographyFontFamily = {
+  slug?: string;
+  fontFamily?: string;
+};
+
+type SpacingSize = {
+  slug?: string;
+  size?: string;
+};
+
+type GlobalStyleSettings = {
+  color?: {
+    palette?: PaletteColor[];
+    gradients?: PaletteGradient[];
+  };
+  typography?: {
+    fontSizes?: TypographyFontSize[];
+    fontFamilies?: TypographyFontFamily[];
+  };
+  spacing?: {
+    spacingSizes?: SpacingSize[];
+  };
+};
+
+type GlobalStylesResponse = {
+  settings?: GlobalStyleSettings;
+};
+
 /**
  * Componente para carregar estilos customizados do WordPress em tempo de renderização.
  * Útil quando os endpoints REST não retornam CSS direto, mas precisamos dos estilos dinâmicos.
@@ -21,11 +64,10 @@ export async function WordPressCustomStyles() {
     );
 
     if (response.ok) {
-      const styleJson = await response.json();
-      
+      const styleJson: GlobalStylesResponse = await response.json();
+
       // Extrai as configurações de estilos globais
-      const styles = styleJson?.styles || {};
-      const settings = styleJson?.settings || {};
+      const settings = styleJson.settings;
       
       // Gera CSS inline a partir dos estilos customizados
       const cssVars = generateCSSVariablesFromSettings(settings);
@@ -50,12 +92,12 @@ export async function WordPressCustomStyles() {
 /**
  * Gera variáveis CSS a partir das configurações do theme.json do WordPress
  */
-function generateCSSVariablesFromSettings(settings: any): string {
+function generateCSSVariablesFromSettings(settings?: GlobalStyleSettings): string {
   const variables: Record<string, string> = {};
 
   // Processa cores customizadas
   if (settings?.color?.palette) {
-    settings.color.palette.forEach((color: any) => {
+    settings.color.palette.forEach((color) => {
       if (color?.slug && color?.color) {
         variables[`--wp--preset--color--${color.slug}`] = color.color;
       }
@@ -64,7 +106,7 @@ function generateCSSVariablesFromSettings(settings: any): string {
 
   // Processa gradientes customizados
   if (settings?.color?.gradients) {
-    settings.color.gradients.forEach((gradient: any) => {
+    settings.color.gradients.forEach((gradient) => {
       if (gradient?.slug && gradient?.gradient) {
         variables[`--wp--preset--gradient--${gradient.slug}`] = gradient.gradient;
       }
@@ -73,7 +115,7 @@ function generateCSSVariablesFromSettings(settings: any): string {
 
   // Processa tipografia customizada
   if (settings?.typography?.fontSizes) {
-    settings.typography.fontSizes.forEach((fontSize: any) => {
+    settings.typography.fontSizes.forEach((fontSize) => {
       if (fontSize?.slug && fontSize?.size) {
         variables[`--wp--preset--font-size--${fontSize.slug}`] = fontSize.size;
       }
@@ -81,7 +123,7 @@ function generateCSSVariablesFromSettings(settings: any): string {
   }
 
   if (settings?.typography?.fontFamilies) {
-    settings.typography.fontFamilies.forEach((fontFamily: any) => {
+    settings.typography.fontFamilies.forEach((fontFamily) => {
       if (fontFamily?.slug && fontFamily?.fontFamily) {
         variables[`--wp--preset--font-family--${fontFamily.slug}`] = fontFamily.fontFamily;
       }
@@ -90,7 +132,7 @@ function generateCSSVariablesFromSettings(settings: any): string {
 
   // Processa espaçamento customizado
   if (settings?.spacing?.spacingSizes) {
-    settings.spacing.spacingSizes.forEach((spacing: any) => {
+    settings.spacing.spacingSizes.forEach((spacing) => {
       if (spacing?.slug && spacing?.size) {
         variables[`--wp--preset--spacing--${spacing.slug}`] = spacing.size;
       }

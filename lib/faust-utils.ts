@@ -3,7 +3,7 @@
  * Helper functions for working with Faust and WordPress data
  */
 
-import type { ContentNode, NodeByUriResponse } from "@/types/wordpress";
+import type { ContentNode } from "@/types/wordpress";
 import { logger } from "@/lib/logger";
 
 /**

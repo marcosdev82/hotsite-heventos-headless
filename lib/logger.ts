@@ -129,7 +129,10 @@ class Logger {
     };
 
     if (status >= 400) {
-      this.warn(`API request failed: ${method} ${path} (${status})`, context);
+      this.warn(`API request failed: ${method} ${path} (${status})`, {
+        ...context,
+        errorMessage: error?.message,
+      });
     } else if (status >= 200 && status < 300) {
       this.debug(`API request successful: ${method} ${path}`, context);
     }

@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { MainLayout } from "@/layouts/MainLayout";
 
 /**
@@ -31,12 +32,12 @@ export function NotFoundContent() {
           </div>
 
           <div className="mt-6">
-            <a
+            <Link
               href="/"
               className="inline-block px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:opacity-90 transition-opacity font-medium"
             >
               Voltar para Home
-            </a>
+            </Link>
           </div>
         </div>
       </div>
