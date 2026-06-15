@@ -1,29 +1,26 @@
 import { Navigation } from "@/components/layout/Navigation";
 import { SiteLogo } from "@/components/layout/SiteLogo";
-import { getMainMenu, getMenuByLocation } from "@/services/menu.service";
+import { getNavigationMenu } from "@/services/menu.service";
 import { getSiteSettings } from "@/services/site-settings.service";
+import type { MenuItem } from "@/types/wordpress";
 import type { SiteSettings } from "@/types/wordpress";
+
+const DEFAULT_MENU_ITEMS: MenuItem[] = [
+  { id: "default-home", label: "Início", path: "/" },
+  { id: "default-eventos", label: "Eventos", path: "/eventos" },
+  { id: "default-busca", label: "Busca", path: "/busca" },
+];
 
 export async function Header() {
   let settings: SiteSettings = {};
-  let menuItems: Awaited<ReturnType<typeof getMenuByLocation>> = [];
+  let menuItems: Awaited<ReturnType<typeof getNavigationMenu>> = [];
 
   settings = await getSiteSettings().catch(() => ({}));
-
-  // Fallback em cascata para evitar menu vazio em produção quando um endpoint falha.
-  menuItems = await getMainMenu().catch(() => []);
+  menuItems = await getNavigationMenu().catch(() => []);
 
   if (!menuItems.length) {
-    console.log(
-      "[menu] Header fallback: getMainMenu vazio. Tentando location PRINCIPAL.",
-    );
-    menuItems = await getMenuByLocation("PRINCIPAL").catch(() => []);
-  }
-
-  if (!menuItems.length) {
-    console.log(
-      "[menu] Header sem itens após fallback. Verifique menu 'Principal' e location PRINCIPAL no WordPress.",
-    );
+    console.log("[menu] Header sem itens do WordPress. Usando menu padrão.");
+    menuItems = DEFAULT_MENU_ITEMS;
   }
 
   const siteTitle = settings.generalSettings?.title || "Hotsite de Eventos";

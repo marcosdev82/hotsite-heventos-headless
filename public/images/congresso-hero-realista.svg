@@ -1,0 +1,87 @@
+<svg width="1920" height="1080" viewBox="0 0 1920 1080" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="nightSky" x1="960" y1="0" x2="960" y2="1080" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#040A1C" />
+      <stop offset="0.45" stop-color="#081833" />
+      <stop offset="1" stop-color="#03101E" />
+    </linearGradient>
+
+    <radialGradient id="spotCenter" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(963 262) rotate(90) scale(426 1080)">
+      <stop offset="0" stop-color="#B8F5FF" stop-opacity="0.9" />
+      <stop offset="0.35" stop-color="#66DAF2" stop-opacity="0.4" />
+      <stop offset="1" stop-color="#66DAF2" stop-opacity="0" />
+    </radialGradient>
+
+    <radialGradient id="spotLeft" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(350 210) rotate(70) scale(260 520)">
+      <stop offset="0" stop-color="#6EE3FF" stop-opacity="0.42" />
+      <stop offset="1" stop-color="#6EE3FF" stop-opacity="0" />
+    </radialGradient>
+
+    <radialGradient id="spotRight" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(1570 210) rotate(110) scale(260 520)">
+      <stop offset="0" stop-color="#6EE3FF" stop-opacity="0.42" />
+      <stop offset="1" stop-color="#6EE3FF" stop-opacity="0" />
+    </radialGradient>
+
+    <linearGradient id="stageFace" x1="960" y1="508" x2="960" y2="718" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#E2FAFF" stop-opacity="0.72" />
+      <stop offset="1" stop-color="#6CCFE6" stop-opacity="0.16" />
+    </linearGradient>
+
+    <linearGradient id="floor" x1="960" y1="650" x2="960" y2="1080" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#04223F" />
+      <stop offset="1" stop-color="#020D17" />
+    </linearGradient>
+
+    <filter id="grain" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.95" numOctaves="2" seed="4" />
+      <feColorMatrix type="saturate" values="0" />
+      <feComponentTransfer>
+        <feFuncA type="table" tableValues="0 0.02" />
+      </feComponentTransfer>
+    </filter>
+  </defs>
+
+  <rect width="1920" height="1080" fill="url(#nightSky)" />
+  <rect width="1920" height="1080" fill="url(#spotCenter)" />
+  <rect width="1920" height="1080" fill="url(#spotLeft)" />
+  <rect width="1920" height="1080" fill="url(#spotRight)" />
+
+  <path d="M250 612L960 360L1670 612V642L960 392L250 642V612Z" fill="#D8F7FF" fill-opacity="0.28" />
+  <path d="M360 646H1560V676H360V646Z" fill="#D9F7FF" fill-opacity="0.38" />
+  <rect x="325" y="676" width="1270" height="210" fill="url(#stageFace)" />
+
+  <path d="M0 670H1920V1080H0V670Z" fill="url(#floor)" />
+
+  <g opacity="0.45" stroke="#72DDF4" stroke-width="2">
+    <path d="M0 742L960 492L1920 742" />
+    <path d="M0 804L960 554L1920 804" />
+    <path d="M0 874L960 624L1920 874" />
+  </g>
+
+  <g fill="#011221" fill-opacity="0.9">
+    <ellipse cx="96" cy="920" rx="60" ry="100" />
+    <ellipse cx="170" cy="914" rx="58" ry="96" />
+    <ellipse cx="245" cy="919" rx="60" ry="100" />
+    <ellipse cx="322" cy="914" rx="58" ry="96" />
+    <ellipse cx="398" cy="919" rx="60" ry="100" />
+    <ellipse cx="475" cy="914" rx="58" ry="96" />
+    <ellipse cx="553" cy="920" rx="60" ry="100" />
+    <ellipse cx="632" cy="914" rx="58" ry="96" />
+    <ellipse cx="712" cy="920" rx="60" ry="100" />
+    <ellipse cx="793" cy="914" rx="58" ry="96" />
+    <ellipse cx="875" cy="920" rx="60" ry="100" />
+    <ellipse cx="958" cy="914" rx="58" ry="96" />
+    <ellipse cx="1041" cy="920" rx="60" ry="100" />
+    <ellipse cx="1124" cy="914" rx="58" ry="96" />
+    <ellipse cx="1208" cy="920" rx="60" ry="100" />
+    <ellipse cx="1292" cy="914" rx="58" ry="96" />
+    <ellipse cx="1376" cy="920" rx="60" ry="100" />
+    <ellipse cx="1461" cy="914" rx="58" ry="96" />
+    <ellipse cx="1546" cy="919" rx="60" ry="100" />
+    <ellipse cx="1632" cy="914" rx="58" ry="96" />
+    <ellipse cx="1718" cy="919" rx="60" ry="100" />
+    <ellipse cx="1805" cy="914" rx="58" ry="96" />
+  </g>
+
+  <rect width="1920" height="1080" filter="url(#grain)" opacity="0.42" />
+</svg>

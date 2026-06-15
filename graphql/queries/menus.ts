@@ -76,3 +76,28 @@ export const GET_MAIN_MENU = `
     }
   }
 `;
+
+export const GET_ANY_MENU_ITEMS = `
+  query GetAnyMenuItems {
+    menuItems(first: 100) {
+      nodes {
+        id
+        label
+        path
+        url
+        target
+        parentId
+        childItems {
+          nodes {
+            id
+            label
+            path
+            url
+            target
+            parentId
+          }
+        }
+      }
+    }
+  }
+`;

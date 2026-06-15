@@ -1,10 +1,64 @@
+/**
+ * Estilos para blocos Gutenberg
+ * Garante especificidade suficiente para sobrescrever estilos do Tailwind
+ */
+
 .entry-content {
   max-width: var(--wp--style--global--content-size, 65rem);
   margin-inline: auto;
+
+  /* Reseta estilos que podem ser aplicados por classe genérica do Tailwind */
+  p {
+    all: revert-layer;
+  }
+
+  a {
+    all: revert-layer;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    all: revert-layer;
+  }
+
+  ul,
+  ol {
+    all: revert-layer;
+  }
+
+  li {
+    all: revert-layer;
+  }
+
+  blockquote {
+    all: revert-layer;
+  }
+
+  code,
+  pre {
+    all: revert-layer;
+  }
+
+  table {
+    all: revert-layer;
+  }
+
+  img {
+    all: revert-layer;
+  }
+
+  /* Aplica espaçamento padrão entre blocos */
+  & > * + * {
+    margin-block-start: var(--wp--style--block-gap, 1.5rem);
+  }
 }
 
 .wp-block-post-content {
-  > * + * {
+  & > * + * {
     margin-block-start: var(--wp--style--block-gap, 1.5rem);
   }
 }

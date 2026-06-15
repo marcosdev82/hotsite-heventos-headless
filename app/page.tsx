@@ -3,6 +3,109 @@ import { Bricolage_Grotesque, Plus_Jakarta_Sans } from "next/font/google";
 import { EventCountdown } from "@/components/content/EventCountdown";
 import { MainLayout } from "@/layouts/MainLayout";
 
+type IconProps = {
+  className?: string;
+};
+
+function TicketIcon({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden className={className}>
+      <path
+        d="M4 8.5A2.5 2.5 0 0 1 6.5 6h11A2.5 2.5 0 0 1 20 8.5v1.2a2.2 2.2 0 0 0 0 4.6v1.2a2.5 2.5 0 0 1-2.5 2.5h-11A2.5 2.5 0 0 1 4 15.5v-1.2a2.2 2.2 0 0 0 0-4.6V8.5Z"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path d="M12 8v8" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function CalendarIcon({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden className={className}>
+      <rect x="3" y="5" width="18" height="16" rx="2.5" stroke="currentColor" strokeWidth="1.8" />
+      <path d="M3 10h18" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+      <path d="M8 3v4M16 3v4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function MapPinIcon({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden className={className}>
+      <path
+        d="M12 21s6-5.4 6-11a6 6 0 1 0-12 0c0 5.6 6 11 6 11Z"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinejoin="round"
+      />
+      <circle cx="12" cy="10" r="2.5" stroke="currentColor" strokeWidth="1.8" />
+    </svg>
+  );
+}
+
+function MonitorIcon({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden className={className}>
+      <rect x="3" y="4" width="18" height="13" rx="2.5" stroke="currentColor" strokeWidth="1.8" />
+      <path d="M9 20h6M12 17v3" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function MicroscopeIcon({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden className={className}>
+      <path d="M8 21h10" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+      <path d="M12 4.5 9.5 7l4.5 4.5 2.5-2.5L12 4.5Z" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" />
+      <path d="M11 12.5a4.5 4.5 0 0 0 0 9" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+      <path d="M8 16h5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function StethoscopeIcon({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden className={className}>
+      <path d="M7 4v5a5 5 0 0 0 10 0V4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+      <path d="M12 14v2.5A4.5 4.5 0 0 0 16.5 21H18a2 2 0 1 0 0-4h-1" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M5 4h4M15 4h4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function CpuIcon({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden className={className}>
+      <rect x="7" y="7" width="10" height="10" rx="2" stroke="currentColor" strokeWidth="1.8" />
+      <path d="M10 10h4v4h-4z" stroke="currentColor" strokeWidth="1.8" />
+      <path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.5 5.5l1.4 1.4M17.1 17.1l1.4 1.4M18.5 5.5l-1.4 1.4M6.9 17.1l-1.4 1.4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function UsersIcon({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden className={className}>
+      <circle cx="9" cy="9" r="3" stroke="currentColor" strokeWidth="1.8" />
+      <path d="M4.5 18a4.5 4.5 0 0 1 9 0" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+      <path d="M16 6.5a2.5 2.5 0 1 1 0 5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+      <path d="M16 18a3.5 3.5 0 0 0-1-2.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function BellIcon({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden className={className}>
+      <path d="M6 10a6 6 0 0 1 12 0v4l1.5 2H4.5L6 14v-4Z" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" />
+      <path d="M10 19a2 2 0 0 0 4 0" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+    </svg>
+  );
+}
+
 const display = Bricolage_Grotesque({
   subsets: ["latin"],
   weight: ["600", "700", "800"],
@@ -14,9 +117,21 @@ const body = Plus_Jakarta_Sans({
 });
 
 const highlights = [
-  { label: "Data", value: "20 a 22 de Agosto de 2026" },
-  { label: "Formato", value: "Presencial + transmissão de sessões-chave" },
-  { label: "Local", value: "Centro de Convenções Frei Caneca, São Paulo" },
+  {
+    label: "Data",
+    value: "20 a 22 de Agosto de 2026",
+    icon: CalendarIcon,
+  },
+  {
+    label: "Formato",
+    value: "Presencial + transmissão de sessões-chave",
+    icon: MonitorIcon,
+  },
+  {
+    label: "Local",
+    value: "Centro de Convenções Frei Caneca, São Paulo",
+    icon: MapPinIcon,
+  },
 ];
 
 const tracks = [
@@ -24,16 +139,19 @@ const tracks = [
     title: "Atualização Científica",
     description:
       "Sessões com evidências recentes, mesas multidisciplinares e discussão de casos reais.",
+    icon: MicroscopeIcon,
   },
   {
     title: "Prática Clínica",
     description:
       "Protocolos aplicáveis para consultório, ambulatório e hospitais em diferentes cenários.",
+    icon: StethoscopeIcon,
   },
   {
     title: "Inovação e Tecnologia",
     description:
       "Inteligência clínica, ferramentas digitais e tendências para ampliar qualidade assistencial.",
+    icon: CpuIcon,
   },
 ];
 
@@ -49,16 +167,19 @@ const schedule = [
     day: "Dia 1",
     period: "08h às 18h",
     focus: "Imersão em atualização diagnóstica e condutas de primeira linha.",
+    icon: CalendarIcon,
   },
   {
     day: "Dia 2",
     period: "08h às 18h",
     focus: "Painéis temáticos com especialistas nacionais e convidados internacionais.",
+    icon: UsersIcon,
   },
   {
     day: "Dia 3",
     period: "08h às 17h",
     focus: "Aplicação prática, discussão de trabalhos e agenda de futuro da área.",
+    icon: TicketIcon,
   },
 ];
 
@@ -66,7 +187,9 @@ export default function HomePage() {
   return (
     <MainLayout>
       <div className={`${body.className} conference-surface`}>
-        <section className="relative overflow-hidden border-b border-border/60 px-4 pb-16 pt-14 sm:px-6 lg:px-8 lg:pb-24 lg:pt-20">
+        <section className="conference-hero relative overflow-hidden border-b border-border/60 px-4 pb-16 pt-14 sm:px-6 lg:px-8 lg:pb-24 lg:pt-20">
+          <div className="conference-hero-image" aria-hidden />
+          <div className="conference-hero-overlay" aria-hidden />
           <div className="conference-ambient" aria-hidden />
           <div className="relative mx-auto max-w-7xl">
             <p className="stagger-fade text-sm font-semibold uppercase tracking-[0.22em] text-primary">
@@ -93,14 +216,16 @@ export default function HomePage() {
             >
               <Link
                 href="#inscricao"
-                className="btn btn-efeito rounded-full px-6 py-3 text-sm font-semibold"
+                className="btn btn-efeito inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-semibold"
               >
+                <TicketIcon className="size-4" />
                 <span>Garantir inscrição</span>
               </Link>
               <Link
                 href="#programacao"
-                className="btn btn-efeito rounded-full px-6 py-3 text-sm font-semibold"
+                className="btn btn-efeito inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-semibold"
               >
+                <CalendarIcon className="size-4" />
                 <span>Ver programação</span>
               </Link>
             </div>
@@ -112,6 +237,7 @@ export default function HomePage() {
                   className="stagger-fade rounded-2xl border border-border/35 bg-background/70 p-4 backdrop-blur"
                   style={{ animationDelay: `${260 + index * 70}ms` }}
                 >
+                  <item.icon className="size-5 text-primary" />
                   <p className="text-xs font-semibold uppercase tracking-[0.14em] text-primary">
                     {item.label}
                   </p>
@@ -135,8 +261,9 @@ export default function HomePage() {
               key={track.title}
               className="rounded-3xl border border-border/40 bg-card p-6 shadow-[0_12px_30px_rgba(3,4,94,0.14)]"
             >
+              <track.icon className="size-6 text-primary" />
               <h2
-                className={`${display.className} text-2xl font-bold text-foreground`}
+                className={`${display.className} mt-3 text-2xl font-bold text-foreground`}
               >
                 {track.title}
               </h2>
@@ -170,6 +297,7 @@ export default function HomePage() {
               </div>
             </div>
             <div className="rounded-3xl border border-background/25 bg-background/10 p-6 backdrop-blur">
+              <MapPinIcon className="size-6 text-muted" />
               <p className="text-xs font-semibold uppercase tracking-[0.16em] text-muted">
                 Local do Evento
               </p>
@@ -202,6 +330,7 @@ export default function HomePage() {
                 key={item.day}
                 className="rounded-2xl border border-border/40 bg-muted/35 p-5"
               >
+                <item.icon className="size-5 text-primary" />
                 <p className="text-xs font-semibold uppercase tracking-[0.15em] text-primary">
                   {item.day}
                 </p>
@@ -240,8 +369,9 @@ export default function HomePage() {
               />
               <button
                 type="button"
-                className="btn btn-efeito rounded-xl px-4 py-3 text-sm font-semibold"
+                className="btn btn-efeito inline-flex items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold"
               >
+                <BellIcon className="size-4" />
                 <span>Quero receber novidades</span>
               </button>
             </form>

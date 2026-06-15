@@ -1,3 +1,8 @@
+/**
+ * Enhanced GraphQL Client with Faust integration
+ * Adds better error handling, caching, and monitoring
+ */
+
 import { env } from "@/lib/env";
 import { logger } from "@/lib/logger";
 
@@ -32,6 +37,9 @@ function getOperationName(query: string): string {
   return match?.[2] ?? "unknown-operation";
 }
 
+/**
+ * Enhanced GraphQL request with better error handling
+ */
 export async function fetchGraphQL<T>(
   query: string,
   {
@@ -90,10 +98,11 @@ export async function fetchGraphQL<T>(
     const duration = Date.now() - startTime;
 
     logger.graphql(operationName, "error", duration, new Error(message));
-    logger.error(
-      `GraphQL network error at ${env.graphqlEndpoint}`,
-      new Error(message)
-    );
+    logger.error(`GraphQL network error at ${env.graphqlEndpoint}`, new Error(message), {
+      endpoint: env.graphqlEndpoint,
+      operationName,
+      tags,
+    });
 
     throw new GraphQLRequestError(
       `GraphQL network error at ${env.graphqlEndpoint}: ${message}`
@@ -106,7 +115,13 @@ export async function fetchGraphQL<T>(
     logger.graphql(operationName, "error", duration);
     logger.error(
       `GraphQL HTTP error: ${response.status} ${response.statusText}`,
-      new Error("HTTP Error")
+      new Error("HTTP Error"),
+      {
+        endpoint: env.graphqlEndpoint,
+        operationName,
+        status: response.status,
+        statusText: response.statusText,
+      }
     );
 
     throw new GraphQLRequestError(
@@ -121,10 +136,7 @@ export async function fetchGraphQL<T>(
   try {
     data = await response.json();
   } catch (error) {
-    logger.error(
-      "Failed to parse GraphQL response",
-      new Error(String(error))
-    );
+    logger.error("Failed to parse GraphQL response", new Error(String(error)));
 
     throw new GraphQLRequestError(
       "Failed to parse GraphQL response as JSON"
@@ -135,7 +147,11 @@ export async function fetchGraphQL<T>(
     logger.graphql(operationName, "error", duration);
     logger.error(
       `GraphQL request returned errors: ${operationName}`,
-      new Error(data.errors[0].message)
+      new Error(data.errors[0].message),
+      {
+        operationName,
+        errors: data.errors,
+      }
     );
 
     throw new GraphQLRequestError(
@@ -149,10 +165,9 @@ export async function fetchGraphQL<T>(
   if (!data.data) {
     logger.warn(`GraphQL request returned empty data: ${operationName}`, {
       operationName,
-      tags,
+      response: data,
     });
-    throw new GraphQLRequestError("GraphQL response não contém dados.");
   }
 
-  return data.data;
+  return data.data as T;
 }

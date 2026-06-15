@@ -1,5 +1,44 @@
 @import "tailwindcss";
 
+@layer components {
+  /**
+   * Layer de componentes do Tailwind com escopo específico
+   * Garante que os estilos WordPress dentro de .entry-content não sejam sobrescritos
+   */
+  
+  /* Reseta estilos Tailwind que podem conflitar com WordPress */
+  .entry-content {
+    @apply text-foreground;
+  }
+
+  /* Garante que elementos dentro de .entry-content usam estilos do WordPress */
+  .entry-content p {
+    @apply leading-relaxed my-0;
+  }
+
+  .entry-content a {
+    @apply no-underline transition-colors;
+  }
+
+  .entry-content h1,
+  .entry-content h2,
+  .entry-content h3,
+  .entry-content h4,
+  .entry-content h5,
+  .entry-content h6 {
+    @apply font-bold leading-tight my-0;
+  }
+
+  .entry-content ul,
+  .entry-content ol {
+    @apply my-0;
+  }
+
+  .entry-content li {
+    @apply my-0;
+  }
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -62,6 +101,59 @@ select:focus-visible {
     );
   opacity: 0.34;
   pointer-events: none;
+}
+
+.conference-hero {
+  isolation: isolate;
+}
+
+.conference-hero-image {
+  position: absolute;
+  inset: 0;
+  background-image: url("/images/congresso-hero-realista.svg");
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  opacity: 0.88;
+  transform: scale(1.02);
+  pointer-events: none;
+}
+
+.conference-hero-overlay {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(110deg, rgba(3, 4, 94, 0.88) 4%, rgba(3, 4, 94, 0.6) 44%, rgba(3, 4, 94, 0.3) 100%),
+    linear-gradient(180deg, rgba(3, 4, 94, 0.44) 0%, rgba(3, 4, 94, 0.7) 100%);
+  pointer-events: none;
+}
+
+.conference-hero h1,
+.conference-hero p,
+.conference-hero article p,
+.conference-hero a {
+  color: #f3fbff;
+}
+
+.conference-hero article {
+  border-color: rgba(202, 240, 248, 0.38);
+  background: rgba(2, 20, 38, 0.52);
+}
+
+.conference-hero .btn-efeito {
+  background-color: #90e0ef;
+  color: #05284f;
+}
+
+.conference-hero .btn-efeito:hover {
+  background-color: #caf0f8;
+}
+
+@media (max-width: 640px) {
+  .conference-hero-image {
+    background-position: 58% center;
+    opacity: 0.78;
+  }
 }
 
 .stagger-fade {

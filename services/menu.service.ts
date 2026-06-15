@@ -1,6 +1,7 @@
 import { fetchGraphQL } from "@/lib/graphql-client";
 import { env } from "@/lib/env";
 import {
+  GET_ANY_MENU_ITEMS,
   GET_MAIN_MENU,
   GET_MENU_BY_LOCATION,
   GET_MENU_BY_SLUG,
@@ -17,6 +18,10 @@ type MenuBySlugResponse = {
 
 type MainMenuResponse = {
   menu: Menu | null;
+};
+
+type AnyMenuItemsResponse = {
+  menuItems: { nodes: MenuItem[] };
 };
 
 export async function getMainMenu(): Promise<MenuItem[]> {
@@ -93,4 +98,48 @@ export async function getMenuBySlug(slug: string): Promise<Menu | null> {
     });
     return null;
   }
+}
+
+export async function getAnyMenuItems(): Promise<MenuItem[]> {
+  try {
+    const data = await fetchGraphQL<AnyMenuItemsResponse>(GET_ANY_MENU_ITEMS, {
+      tags: ["wordpress", "menus", "menu-any"],
+    });
+
+    return data.menuItems?.nodes ?? [];
+  } catch (error) {
+    console.log("[menu] Any menu items request failed", {
+      endpoint: env.graphqlEndpoint,
+      reason: error instanceof Error ? error.message : "unknown",
+    });
+    return [];
+  }
+}
+
+export async function getNavigationMenu(): Promise<MenuItem[]> {
+  const byName = await getMainMenu();
+  if (byName.length) return byName;
+
+  const locationCandidates = ["PRINCIPAL"];
+  for (const location of locationCandidates) {
+    const byLocation = await getMenuByLocation(location);
+    if (byLocation.length) {
+      return byLocation;
+    }
+  }
+
+  const slugCandidates = ["principal", "main-menu", "menu-principal"];
+  for (const slug of slugCandidates) {
+    const menu = await getMenuBySlug(slug);
+    const nodes = menu?.menuItems?.nodes ?? [];
+    if (nodes.length) {
+      return nodes;
+    }
+  }
+
+  // Fallback final: retorna qualquer item top-level disponível.
+  const fallbackNodes = await getAnyMenuItems();
+  if (!fallbackNodes.length) return [];
+
+  return fallbackNodes.filter((item) => !item.parentId);
 }

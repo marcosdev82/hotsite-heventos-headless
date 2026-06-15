@@ -1,0 +1,329 @@
+/**
+ * WordPress Override CSS
+ * 
+ * Este arquivo sobrescreve estilos do Tailwind para que os estilos
+ * customizados do WordPress (cores, tipografia, etc.) apareçam corretamente
+ * 
+ * Ordem de carregamento: esse arquivo deve ser carregado DEPOIS do Tailwind
+ * e do wordpress.css para garantir máxima especificidade
+ */
+
+/* Reset de estilos Tailwind genéricos dentro de .entry-content */
+.entry-content {
+  color: var(--foreground) !important;
+  line-height: 1.625 !important;
+}
+
+/* Headings */
+.entry-content h1,
+.entry-content h2,
+.entry-content h3,
+.entry-content h4,
+.entry-content h5,
+.entry-content h6 {
+  color: var(--foreground) !important;
+  font-weight: 700 !important;
+  line-height: 1.2 !important;
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.entry-content h1 {
+  font-size: 2.25rem !important;
+}
+
+.entry-content h2 {
+  font-size: 1.875rem !important;
+}
+
+.entry-content h3 {
+  font-size: 1.5rem !important;
+}
+
+.entry-content h4 {
+  font-size: 1.25rem !important;
+}
+
+.entry-content h5 {
+  font-size: 1.125rem !important;
+}
+
+.entry-content h6 {
+  font-size: 1rem !important;
+}
+
+/* Paragraphs */
+.entry-content p {
+  font-size: 1rem !important;
+  line-height: 1.625 !important;
+  margin-bottom: 1rem;
+  color: var(--foreground) !important;
+}
+
+/* Links */
+.entry-content a {
+  color: var(--primary) !important;
+  text-decoration: underline !important;
+  text-decoration-color: color-mix(in srgb, var(--primary), transparent 50%);
+  text-underline-offset: 0.16em;
+  transition: color 180ms ease;
+}
+
+.entry-content a:hover {
+  color: var(--foreground) !important;
+}
+
+.entry-content a:focus-visible {
+  outline: 2px solid var(--primary) !important;
+  outline-offset: 2px;
+}
+
+/* Listas */
+.entry-content ul,
+.entry-content ol {
+  font-size: 1rem !important;
+  line-height: 1.625 !important;
+  padding-inline-start: 1.4rem;
+  margin-bottom: 1rem;
+  color: var(--foreground) !important;
+}
+
+.entry-content li {
+  margin-bottom: 0.35rem;
+  color: var(--foreground) !important;
+}
+
+.entry-content li + li {
+  margin-top: 0.35rem;
+}
+
+/* Listas aninhadas */
+.entry-content ul ul,
+.entry-content ul ol,
+.entry-content ol ul,
+.entry-content ol ol {
+  margin-top: 0.5rem;
+  margin-bottom: 0;
+  padding-inline-start: 1.4rem;
+}
+
+/* Definição de listas */
+.entry-content dt {
+  font-weight: 700 !important;
+  margin-top: 0.5rem;
+}
+
+.entry-content dd {
+  margin-left: 1rem;
+  margin-bottom: 0.5rem;
+  color: var(--foreground) !important;
+}
+
+/* Blockquotes */
+.entry-content blockquote {
+  font-size: 1rem !important;
+  line-height: 1.625 !important;
+  margin: 1rem 0;
+  border-inline-start: 4px solid var(--primary);
+  padding: 0.75rem 1rem;
+  background: color-mix(in srgb, var(--muted), transparent 56%);
+  color: var(--foreground) !important;
+}
+
+.entry-content .wp-block-quote {
+  border-left: 4px solid var(--primary) !important;
+  padding-left: 1rem;
+  margin: 1rem 0;
+}
+
+.entry-content .wp-block-verse {
+  font-size: 1rem !important;
+  line-height: 1.625 !important;
+  white-space: pre-wrap;
+  color: var(--foreground) !important;
+}
+
+.entry-content .wp-block-pullquote {
+  border-top: 4px solid var(--primary) !important;
+  border-bottom: 4px solid var(--primary) !important;
+  padding: 1rem;
+  margin: 1.5rem 0;
+  font-size: 1.25rem;
+  font-style: italic;
+  color: var(--foreground) !important;
+}
+
+/* Code */
+.entry-content pre,
+.entry-content code {
+  font-size: 0.875rem !important;
+  line-height: 1.625 !important;
+  border-radius: 0.5rem;
+  background: color-mix(in srgb, var(--foreground), transparent 92%);
+  color: var(--foreground) !important;
+}
+
+.entry-content pre {
+  overflow-x: auto;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.entry-content code {
+  padding: 0.2em 0.4em;
+  font-family: 'Courier New', monospace;
+}
+
+/* Tabelas */
+.entry-content table {
+  width: 100% !important;
+  border-collapse: collapse;
+  border: 1px solid color-mix(in srgb, var(--border), transparent 35%);
+  margin-bottom: 1rem;
+}
+
+.entry-content th,
+.entry-content td {
+  border: 1px solid color-mix(in srgb, var(--border), transparent 45%);
+  padding: 0.6rem;
+  text-align: left;
+  color: var(--foreground) !important;
+}
+
+.entry-content th {
+  font-weight: 700 !important;
+  background: color-mix(in srgb, var(--muted), transparent 25%);
+}
+
+/* Imagens */
+.entry-content img {
+  max-width: 100% !important;
+  height: auto !important;
+  display: block;
+  margin: 1rem 0;
+  border-radius: 0.5rem;
+}
+
+/* Blocos Gutenberg - Buttons */
+.entry-content .wp-block-button__link {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-decoration: none !important;
+  cursor: pointer;
+  transition: opacity 180ms ease, background-color 180ms ease, color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+}
+
+.entry-content .wp-block-button__link:hover {
+  opacity: 0.9;
+}
+
+.entry-content .wp-block-button__link:focus-visible {
+  outline: 2px solid var(--primary) !important;
+  outline-offset: 2px;
+}
+
+/* Separadores */
+.entry-content hr,
+.entry-content .wp-block-separator {
+  border: 0 !important;
+  border-top: 2px solid !important;
+  border-color: color-mix(in srgb, var(--border), transparent 35%);
+  margin: 2rem 0;
+}
+
+/* Espaçamento entre blocos */
+.entry-content > * + * {
+  margin-block-start: var(--wp--style--block-gap, 1.5rem) !important;
+}
+
+/* Garante que blocos com estilos customizados respeitam as cores do WordPress */
+.entry-content [class*='has-'][class*='-background-color'] {
+  background-color: var(--wp-bg-color, currentColor) !important;
+}
+
+.entry-content [class*='has-'][class*='-color']:not([class*='background']) {
+  color: var(--wp-text-color, currentColor) !important;
+}
+
+/* Media embeds responsivos */
+.entry-content iframe,
+.entry-content embed,
+.entry-content object {
+  max-width: 100%;
+  height: auto;
+}
+
+.entry-content .wp-block-embed {
+  margin-bottom: 1rem;
+}
+
+/* Galeria de imagens */
+.entry-content .wp-block-gallery {
+  margin-bottom: 1rem;
+}
+
+.entry-content .wp-block-gallery img {
+  margin: 0;
+}
+
+/* Colunas */
+.entry-content .wp-block-columns {
+  margin-bottom: 1rem;
+}
+
+.entry-content .wp-block-column {
+  color: var(--foreground) !important;
+}
+
+/* Grupo de blocos */
+.entry-content .wp-block-group {
+  margin-bottom: 1rem;
+}
+
+/* Covers */
+.entry-content .wp-block-cover {
+  margin-bottom: 1rem;
+  border-radius: 0.5rem;
+}
+
+/* Assegurar que textos dentro de blocos de fundo respeitam contraste */
+.entry-content .has-background {
+  color: inherit;
+  padding: 1rem;
+  border-radius: 0.375rem;
+}
+
+/* Arquivo e paginação */
+.entry-content .wp-pagenavi,
+.entry-content .post-navigation {
+  margin: 2rem 0;
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+}
+
+.entry-content .wp-pagenavi a,
+.entry-content .post-navigation a {
+  padding: 0.5rem 1rem;
+  background: color-mix(in srgb, var(--muted), transparent 25%);
+  color: var(--primary) !important;
+  text-decoration: none !important;
+  border-radius: 0.375rem;
+  transition: background-color 180ms ease;
+}
+
+.entry-content .wp-pagenavi a:hover,
+.entry-content .post-navigation a:hover {
+  background: color-mix(in srgb, var(--muted), transparent 10%);
+}
+
+.entry-content .wp-pagenavi .current,
+.entry-content .post-navigation .current {
+  padding: 0.5rem 1rem;
+  background: var(--primary);
+  color: var(--primary-foreground) !important;
+  border-radius: 0.375rem;
+}
