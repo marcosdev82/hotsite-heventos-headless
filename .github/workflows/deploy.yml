@@ -180,7 +180,12 @@ jobs:
     needs: deploy-strategy
     if: needs.deploy-strategy.outputs.use_webhook != 'true' && needs.deploy-strategy.outputs.use_ssh == 'true' && needs.deploy-strategy.outputs.has_runtime_env == 'true'
     steps:
+      - name: Skip deploy when SSH is not configured
+        if: ${{ secrets.SSH_HOST == '' || secrets.SSH_USER == '' || secrets.SSH_PRIVATE_KEY == '' }}
+        run: echo "Skipping deployment because SSH secrets are not fully configured."
+
       - name: Deploy via SSH
+        if: ${{ secrets.SSH_HOST != '' && secrets.SSH_USER != '' && secrets.SSH_PRIVATE_KEY != '' }}
         uses: appleboy/ssh-action@v1.2.0
         with:
           host: ${{ secrets.SSH_HOST || vars.SSH_HOST }}
